@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.pos.mapper.PosMapper">
+	<insert id="addLoginHistory" parameterType="PosLoginHistory">
+		insert into pos_login_history (id, signed_in_at, employee_id, pos_id)
+		values (seq_pos_login_history.nextval, #{signedIn}, #{employee.id}, #{pos.id})
+	</insert>
+	
+	<insert id="addEmployeeTimetable" parameterType="EmployeeTimetable">
+		insert into employee_timetable (id, started_at, employee_id)
+		values (seq_employee_timetable.nextval, #{startedAt}, #{employee.id})
+	</insert>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

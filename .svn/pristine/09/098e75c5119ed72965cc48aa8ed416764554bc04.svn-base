@@ -1,0 +1,13 @@
+package com.es.movie.mapper;
+
+import java.util.List;
+
+import com.es.movie.vo.Seat;
+
+public interface ScreenMapper {
+	//id로 seat정보 조회
+	Seat getSeatBySeatId(int seatId);
+	
+	//screenId로 모든 Seat 조회
+	List<Seat> getSeatsByScreenId(int screenId);
+}

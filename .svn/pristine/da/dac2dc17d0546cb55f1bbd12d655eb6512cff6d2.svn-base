@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.common.mapper.HomeMainMapper">
+	<select id="getMovieRankName" parameterType="MonthDate" resultType="MovieRankNameForm">
+		select
+	        *
+		from
+		    (select
+		        movieName "name", 
+		        rank() over (order by cnt desc) as movieRank
+		    from    
+		        (select
+		            F.NAME as movieName, 
+		            count(*) as cnt
+		        from
+		            TICKET_RECEIPTS A, TICKETS B, MOVIE_TIMETABLE C, SCREEN_MOVIES D, MOVIES E, MOVIE_TRANSLATION F
+		        where
+		            A.id = B.TICKET_RECEIPT_ID
+		        and
+		            B.MOVIE_TIMETABLE_ID = C.ID 
+		        and
+		            C.SCREEN_MOVIE_ID = D.ID
+		        and
+		            D.MOVIE_ID = E.ID
+		        and
+		            E.ID = F.MOVIE_ID
+		        and
+		            A.PURCHASE_DATE >= #{startDate}
+		        and
+		            A.PURCHASE_DATE &lt;= #{endDate}
+		        group by 
+		            F.NAME))
+		where
+		    movieRank &lt;= 5
+	</select>
+</mapper>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.pos.mapper.TicketMapper">
+
+	<select id="getReservedSeatsByTimetableId" parameterType="int" resultType="Ticket">
+		select
+			C.id				"movieTimetable.id"
+			,C.started_at		"movieTimetable.statedAt"
+			,C.ended_at			"movieTimetable.endedAt"
+			,C.ordered			"movieTimetable.ordered"
+			,D.id				id
+			,D.seat_id			"seat.id"
+			,E.name				"seat.name"
+		from movie_timetable C, tickets D, seats E
+		where C.id = D.movie_timetable_id
+		and E.id = D.seat_id
+		and C.id = #{value}
+	</select>
+
+	<select id="getCardSelect" parameterType="string" resultType="TicketReceipt">
+		select
+    		A.id					id,
+    		A.rid					rid,
+    		A.price					price,
+    		A.purchase_type			purchaseType,
+    		A.discounted_price		discountedPrice,
+    		A.pos_id				pos,
+    		A.customer_id			"customer.id",
+    		A.deleted				deleted,
+    		A.purchase_date			purchaseDate,
+    		A.credit_no				creditNo,
+			B.username				"customer.username",
+			B.password				"customer.password",
+			B.name					"customer.name",
+			B.phone					"customer.phone",
+			B.email					"customer.email",
+			B.gender				"customer.gender",
+			B.miliege				"customer.miliege",
+			B.image_uri				"customer.imageUri",
+			B.deleted				"customer.deleted",
+			B.third_party			"customer.thirdParty",
+			B.created_at			"customer.createdAt",
+			B.updated_at			"customer.updatedAt",
+			B.customer_rank_id		"customer.customerRank.type",
+			B.customer_type_id		"customer.customerTypes.type",
+			B.birth					"customer.birth"
+    		
+		from
+		    TICKET_RECEIPTS A, CUSTOMERS B
+		where
+		    A.CUSTOMER_ID = B.ID
+		and 
+			A.CREDIT_NO like '%' || #{value} || '%'
+	</select>
+	
+	<select id="getCardDetailSelect" parameterType="int" resultType="TicketReceipt">
+		select
+    		A.id					id,
+    		A.rid					rid,
+    		A.price					price,
+    		A.purchase_type			purchaseType,
+    		A.discounted_price		discountedPrice,
+    		A.pos_id				pos,
+    		A.customer_id			"customer.id",
+    		A.deleted				deleted,
+    		A.purchase_date			purchaseDate,
+    		A.credit_no				creditNo,
+			B.username				"customer.username",
+			B.password				"customer.password",
+			B.name					"customer.name",
+			B.phone					"customer.phone",
+			B.email					"customer.email",
+			B.gender				"customer.gender",
+			B.miliege				"customer.miliege",
+			B.image_uri				"customer.imageUri",
+			B.deleted				"customer.deleted",
+			B.third_party			"customer.thirdParty",
+			B.created_at			"customer.createdAt",
+			B.updated_at			"customer.updatedAt",
+			B.customer_rank_id		"customer.customerRank.type",
+			B.customer_type_id		"customer.customerTypes.type",
+			B.birth					"customer.birth"
+    		
+		from
+		    TICKET_RECEIPTS A, CUSTOMERS B
+		where
+		    A.CUSTOMER_ID = B.ID
+		and 
+			A.customer_id = #{value}
+	</select>
+	
+	<select id="getRidSelect" parameterType="string" resultType="TicketReceipt">
+		select
+    		A.id					id,
+    		A.rid					rid,
+    		A.price					price,
+    		A.purchase_type			purchaseType,
+    		A.discounted_price		discountedPrice,
+    		A.pos_id				"pos.id",
+    		A.customer_id			"customer.id",
+    		A.deleted				deleted,
+    		A.purchase_date			purchaseDate,
+    		A.credit_no				creditNo,
+			B.username				"customer.username",
+			B.password				"customer.password",
+			B.name					"customer.name",
+			B.phone					"customer.phone",
+			B.email					"customer.email",
+			B.gender				"customer.gender",
+			B.miliege				"customer.miliege",
+			B.image_uri				"customer.imageUri",
+			B.deleted				"customer.deleted",
+			B.third_party			"customer.thirdParty",
+			B.created_at			"customer.createdAt",
+			B.updated_at			"customer.updatedAt",
+			B.customer_rank_id		"customer.customerRank.type",
+			B.customer_type_id		"customer.customerTypes.type",
+			B.birth					"customer.birth"
+    		
+		from
+		    TICKET_RECEIPTS A, CUSTOMERS B
+		where
+		    A.CUSTOMER_ID = B.ID
+		and 
+			A.rid like '%' || #{value} || '%'
+	</select>
+	
+	<select id="getFosAndDateSelect" parameterType="TicketReceipt" resultType="PosLoginHistory">
+		select
+			id					id,
+			signed_in_at		signedIn,
+			signed_out_at		signedOut,
+			employee_id			"employee.id",
+			pos_id				"pos.id"
+		from
+			pos_login_history
+		where
+			pos_id = #{pos.id}
+        and
+            signed_in_at &lt; #{purchaseDate}
+        and
+            signed_out_at >= #{purchaseDate}			
+	</select>
+	
+	<select id="getRidDetailSelect" parameterType="int" resultType="TicketReceipt">
+		select
+    		A.id					id,
+    		A.rid					rid,
+    		A.price					price,
+    		A.purchase_type			purchaseType,
+    		A.discounted_price		discountedPrice,
+    		A.pos_id				"pos.id",
+    		A.customer_id			"customer.id",
+    		A.deleted				deleted,
+    		A.purchase_date			purchaseDate,
+    		A.credit_no				creditNo,
+			B.username				"customer.username",
+			B.password				"customer.password",
+			B.name					"customer.name",
+			B.phone					"customer.phone",
+			B.email					"customer.email",
+			B.gender				"customer.gender",
+			B.miliege				"customer.miliege",
+			B.image_uri				"customer.imageUri",
+			B.deleted				"customer.deleted",
+			B.third_party			"customer.thirdParty",
+			B.created_at			"customer.createdAt",
+			B.updated_at			"customer.updatedAt",
+			B.customer_rank_id		"customer.customerRank.type",
+			B.customer_type_id		"customer.customerTypes.type",
+			B.birth					"customer.birth"
+    		
+		from
+		    TICKET_RECEIPTS A, CUSTOMERS B
+		where
+		    A.CUSTOMER_ID = B.ID
+		and 
+			A.customer_id = #{value}
+	</select>
+
+</mapper>

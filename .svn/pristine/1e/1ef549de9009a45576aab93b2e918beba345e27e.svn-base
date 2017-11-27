@@ -1,0 +1,61 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/common/taglibs.jsp" %>
+<html>
+<head>
+	<title>Home</title>
+	
+	<%@ include file="/WEB-INF/views/common/head.jsp" %>	
+</head>
+<body>
+	<c:set var="nav_active" value="management" />
+	
+	<%@ include file="/WEB-INF/views/common/nav.jsp" %>
+	<div class="row">
+		<div class="col-md-2">
+			<c:set var="side_active" value="register" />
+			<%@ include file="/WEB-INF/views/employee/side_employee.jsp" %>
+		</div>
+		<div class="col-md-10">
+			<div class="container top-margin">
+				<form action="" class="form-horizontal">
+					<div class="form-group">
+					    <label class="col-md-1 control-label">이름</label>
+					    <div class="col-md-4">
+					    	<input type="text" class="form-control" name="name">
+						</div>
+					
+					    <label class="col-md-1 control-label">성별</label>
+					    <div class="col-md-4">
+					    	<input type="radio" class="btn-input" name="gender" value="1" content="남자"/>
+					    	<input type="radio" class="btn-input" name="gender" value="2" content="여자"/>
+						</div>
+					</div>
+					
+					<div class="form-group">
+					    <label class="col-md-1 control-label">생년월일</label>
+					    <div class="col-md-4">
+					    	<input type="date" class="form-control" name="birth">
+						</div>
+					
+					    <label class="col-md-1 control-label">이름</label>
+					    <div class="col-md-4">
+					    	<input type="text" class="form-control" name="name">
+						</div>
+					</div>
+					
+					
+					<div class="form-group">
+					    <label class="col-md-1 control-label">연락처</label>
+					    <div class="col-md-9">
+					    	<input type="text" class="form-control" name="name">
+						</div>
+					</div>
+				</form>
+			</div>
+			
+		</div>
+	</div>
+	
+</body>
+</html>

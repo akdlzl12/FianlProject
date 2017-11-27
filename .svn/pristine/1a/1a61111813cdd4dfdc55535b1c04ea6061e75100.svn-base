@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.employee.mapper.EmployeeMapper">
+	<select id="readNextId" resultType="int">
+		select seq_employees.nextval
+		from dual
+	</select>
+	<select id="readTotalRow" parameterType="pagination" resultType="int">
+		select count(*)
+		from employees
+		<if test="opt != null">
+			<choose>
+				<when test="opt == 'id'">
+					where ${opt} = #{keyword}
+				</when>
+				<otherwise>
+					where ${opt} like #{keyword} || '%'	
+				</otherwise>
+			</choose>
+		</if>
+	</select>
+	
+	<insert id="insert" parameterType="Employee">
+		insert into employees 
+			(id, name, address, phone, hourly_pay, gender, account_no, job_type, hired_at, birth)
+		values 
+			(#{id}, #{name}, #{address}, #{phone}, #{hourlyPay}, #{gender}, #{accountNo}, #{jobType}, #{hiredAt}, #{birth})
+	</insert>
+	
+	<select id="list" parameterType="Pagination" resultType="Employee">
+		select id, phone, name, jobType
+		from (
+			select 
+				id,
+				phone,
+				name,
+				job_type 		as jobType,
+				row_number() over (order by id) as rn
+			from 
+				employees
+			<if test="opt != null">
+				<choose>
+					<when test="opt == 'id'">
+						where ${opt} = #{keyword}
+					</when>
+					<otherwise>
+						where ${opt} like #{keyword} || '%'	
+					</otherwise>
+				</choose>
+				
+			</if>
+		)
+		where
+			rn between #{beginIndex} and #{endIndex}
+	</select>
+	
+	<select id="read" parameterType="int" resultType="Employee">
+		select
+			id,
+			name,
+			address,
+			phone,
+			hourly_pay 		as hourlyPay,
+			gender,
+			birth,
+			account_no 		as accountNo,
+			job_type 		as jobType,
+			hired_at 		as hiredAt,
+			dismissed_at 	as dismissedAt
+		from employees
+		where id = #{value}
+	</select>
+	
+	<update id="update" parameterType="Employee">
+		update employees
+		<set>
+			<if test="jobType != null">
+				job_type = #{jobType},
+			</if>
+			<if test="dismissedAt != null">
+				dismissed_at = #{dismissedAt},
+			</if>
+			<if test="hourlyPay != null">
+				hourly_pay = #{hourlyPay}
+			</if>
+		</set>	
+		where
+			id = #{id}
+	</update>
+	
+	<update id="delete" parameterType="int">
+	
+	</update>
+	
+	<select id="listJobHistoryByEmpId" parameterType="int" resultType="JobHistory">
+		select
+			H.id,
+			H.job_type 			as jobType,
+			H.started_date 		as startedDate,
+			H.ended_date 		as endedDate,
+			H.employee_id 		as employeeId
+		from
+			employees E, job_history H
+		where
+			E.id = H.employee_id
+			and E.id = #{value}
+	</select>
+	
+	
+	
+	<select id="listManagementByEmpIdAndDate" parameterType="hashmap" resultType="EmployeeManagement">
+		select
+			M.id,
+			M.detail,
+			M.reason,
+			M.employee_timetable_id
+		from employee_management M, employee_timetable T
+		where
+			T.employee_id = #{id}
+			and to_char(#{when}, 'YYYYMM') = to_char(T.started_at, 'YYYYMM')
+			and M.employee_timetable_id = T.id
+			and M.deleted = 0
+	</select>
+	
+	<select id="listTimetableByEmpIdAndDate" parameterType="hashmap" resultType="EmployeeTimetable">	
+		select
+			M.id,
+			M.detail,
+			M.reason,
+			M.employee_timetable_id
+		from employee_timetable T, employee_management M
+		where
+			T.employee_id = #{id}
+			and to_char(#{when}, 'YYMM') = to_char(T.started_at, 'YYMM')
+			and M.employee_timetable_id = T.id
+			and M.deleted = 0;
+			select *
+			from employee_timetable
+	</select>
+	
+	<select id="readSalaryAndWorkingHoursByIdAndDate" parameterType="hashmap" resultType="hashmap">
+		select 
+			working_hours * hourly_pay as salary, working_hours from
+			employees E, (
+				select 
+					sum((nvl((ENDED_AT - STARTED_AT), 0) + nvl((REST_STARTED_AT - REST_ENDED_AT), 0)) * 24) working_hours,
+					employee_id
+				from
+					employee_timetable
+				where 
+					employee_id = #{id}
+					and to_char(started_at, 'YYMM') = to_char(#{when}, 'YYMM')
+				group by employee_id) T
+			where E.id = T.employee_id
+	</select>
+	
+	<select id="readMismatchByIdAndDate" parameterType="hashmap" resultType="int">
+		select 
+			nvl(sum(mismatch_money), 0) mismatch
+		from 
+			DAILY_REPORTS
+		where 
+			employee_id = #{id}
+			and to_char(#{when}, 'YYYYMM') = to_char(working_date, 'YYYYMM')
+	</select>
+	
+	<select id="listTheifRecordByEmpId" parameterType="int" resultType="EmployeeManagement">
+		select 
+			M.id, 
+			M.detail, 
+			M.reason, 
+			M.employee_timetable_id as "timetable.id",
+			T.started_at 			as "timetable.startedAt",
+			T.ended_at 				as "timetable.endedAt"
+		from 
+			employee_management M, employee_timetable T
+		where 
+			T.employee_id = #{id}
+			and T.id = M.employee_timetable_id
+			and M.detail = 'T'
+			and M.deleted = 0
+	</select>
+	
+	
+	
+	<select id="readNextTimetableId" resultType="int">
+		select seq_employee_timetable.nextval
+		from dual
+	</select>
+	
+	<insert id="registerTimetable" parameterType="EmployeeTimetable">
+		insert into employee_timetable (id, started_at, ended_at, employee_id)
+		values ( #{id}, #{startedAt}, #{endedAt}, #{employee.id} )
+	</insert>
+	
+	<insert id="registerTimetableManagement" parameterType="EmployeeManagement">
+		insert into employee_management (id, detail, reason, employee_timetable_id)
+		values (seq_employee_management.nextval, #{detail}, #{reason}, #{timetable.id})
+	</insert>
+	
+	<select id="readTimetableIdByIdAndDate" parameterType="hashmap" resultType="EmployeeTimetable">
+		select 
+			id,
+			started_at 		as startedAt,
+			ended_at 		as endedAt,
+			rest_started_at as restStartedAt,
+			rest_ended_at 	as restEndedAt
+		from
+			employee_timetable
+		where
+		 	employee_id = #{id}
+		 	and to_char(started_at, 'YYYYMMDD') = to_char(#{when}, 'YYYYMMDD')
+	</select>
+	
+	<update id="updatePayHistoryEndedDate" parameterType="int">
+		update
+			pay_history
+		set
+			ended_date = sysdate
+		where
+			employee_id = #{value}
+	</update>
+	
+	<insert id="insertPayHistory" parameterType="PayHistory">
+		insert into pay_history (id, hourly_pay, employee_id, started_date)
+		values (seq_pay_history.nextval, #{hourlyPay}, #{employee.id}, #{startedDate})
+	</insert>
+	
+	<select id="listPayHistoryByEmpId" parameterType="hashmap" resultType="PayHistory">
+		select
+			id,
+			hourly_pay 		as hourlyPay,
+			employee_id 	as employeeId,
+			started_date 	as startedDate
+		from
+			pay_history
+		where
+			employee_id = #{id}
+	</select>
+	
+	<select id="listTimetableByDate" parameterType="date" resultType="EmployeeTimetable">
+		select
+			E.id 				as "employee.id",
+			E.name 				as "employee.name",
+			T.id,
+			T.started_at 		as startedAt,
+			T.ended_at 			as endedAt,
+			T.rest_started_at 	as restStartedAt,
+			T.rest_ended_at 	as restEndedAt,
+			M.detail    		as "management.detail",
+			M.id    			as "management.id"
+		from 
+			employees E, employee_timetable T, employee_management M
+		where 
+			E.id = T.employee_id
+			and T.id = M.employee_timetable_id(+)
+		 	and to_char(#{value}, 'YYYYMMDD') = to_char(T.started_at, 'YYYYMMDD')
+	</select>
+	
+	<select id="getEmployeeByIdentifier" parameterType="hashmap" resultType="Employee">
+		select 
+			id
+			,name
+			,address
+			,phone
+			,hourly_pay
+			,gender
+			,account_no					accountNo
+			,job_type					jobType
+			,hired_at					hiredAt
+			,dismissed_at				dismissedAt
+			,birth						birth	
+		from employees
+		<where>
+			<if test="id != null">
+				and job_type || id || to_char(hired_at, 'yymmdd') = #{id}
+			</if>
+			<if test="password != null">
+				and to_char(birth, 'yymmdd') || replace(substr(phone, 4), '-', '') = #{password}
+			</if>
+		</where>
+	</select>
+	
+	<update id="updateTimetable" parameterType="EmployeeTimetable">
+		update
+			employee_timetable
+		<set>
+			<if test="startedAt != null">
+				started_at = #{startedAt},
+			</if>
+			<if test="endedAt != null">
+				ended_at = #{endedAt},
+			</if>
+			<if test="restStartedAt != null">
+				rest_started_at = #{restStartedAt},
+			</if>
+			
+			<if test="restEndedAt != null">
+				rest_ended_at = #{restEndedAt},
+			</if>
+		</set>
+		where
+			id = #{id}
+	</update>
+	
+	<update id="updateManagement" parameterType="EmployeeTimetable">
+		update employee_management
+		set
+			detail = #{managementDetail}
+		where
+			id = #{managementId}
+	</update>
+	
+	<insert id="insertManagement" parameterType="EmployeeTimetable">
+		insert into employee_management (id, detail, reason, employee_timetable_id)
+		values (seq_employee_timetable.nextval, #{managementDetail}, '', #{id})
+	</insert>
+</mapper>

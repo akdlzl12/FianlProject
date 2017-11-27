@@ -1,0 +1,11 @@
+package com.es.pos.service;
+
+import com.es.employee.vo.Employee;
+import com.es.pos.vo.PosLoginHistory;
+
+public interface LogService {
+
+	PosLoginHistory enrollStartingWork(Employee employee, int posId);
+	Employee findEmployeeById(long id, long pwd);
+	PosLoginHistory enrollFinishingWork(PosLoginHistory login);
+}

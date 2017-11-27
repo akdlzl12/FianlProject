@@ -1,0 +1,58 @@
+package com.es.pos.service;
+
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.es.employee.vo.Employee;
+import com.es.employee.vo.EmployeeTimetable;
+import com.es.pos.mapper.PosMapper;
+import com.es.pos.mapper.PosTestMapper;
+import com.es.pos.vo.Pos;
+import com.es.pos.vo.PosLoginHistory;
+
+@Service
+public class LogServiceImpl implements LogService {
+
+	@Autowired
+	private PosTestMapper posTestMapper;
+	@Autowired
+	private PosMapper posMapper;
+	
+	@Override
+	public Employee findEmployeeById(long id, long pwd) {
+		Employee employee = posTestMapper.getEmployeeByIdentifier(id);
+		if(employee == null) {
+			throw new RuntimeException("잘못된 ID 혹은 비밀번호 입니다.");
+		}
+		
+		long noMinusPhone = Long.parseLong(employee.getPhone().replaceAll("-", ""));
+		if(noMinusPhone != pwd) {
+			throw new RuntimeException("잘못된 ID 혹은 비밀번호 입니다.");			
+		}
+		return employee;
+	}
+
+	@Override
+	public PosLoginHistory enrollStartingWork(Employee employee, int posId) {
+		Date now = new Date();
+		
+		PosLoginHistory login = new PosLoginHistory();
+		login.setSignedIn(now);
+		login.setEmployee(employee);
+		
+		Pos pos = new Pos();
+		pos.setId(posId);
+		login.setPos(pos);
+		
+		EmployeeTimetable timetable = new EmployeeTimetable();
+		timetable.setStartedAt(now);
+		timetable.setEmployee(employee);
+		
+		posMapper.addLoginHistory(login);
+		posMapper.addEmployeeTimetable(timetable);
+		
+		return login;
+	}
+}

@@ -1,0 +1,33 @@
+package com.es.pos.web;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.es.employee.vo.Employee;
+import com.es.pos.service.LogService;
+import com.es.pos.vo.PosLoginForm;
+
+@Controller
+public class LoginController {
+
+	@Autowired
+	private LogService logService;
+	
+	@GetMapping("/login.esc")
+	public String form() {
+		return "loginform";
+	}
+	
+	@PostMapping("/login.esc")
+	public String login(PosLoginForm loginForm, HttpSession session) {
+		Employee employee = logService.findEmployeeById(loginForm.getEmpId(), loginForm.getEmpPwd());
+		
+		logService.enrollStartingWork(employee, loginForm.getPosId());
+		session.setAttribute("LOGIN_EMP", employee);
+		return "redirect:/pos/home.esc";
+	}
+}

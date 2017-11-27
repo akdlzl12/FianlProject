@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.movie.mapper.MovieMapper">
+<!-- 영화 등록   -->
+	<select id="getMovieSeq" resultType="int" >
+		select seq_movies.nextval from dual
+	</select>
+	
+	<insert id="addMovie" parameterType="Movie">
+		insert into movies
+		(id, publish_date, open_date, age_limit, dubbed)
+		values
+		(#{id}, #{publishDate}, #{openDate}, #{ageLimit}, #{dubbed})
+	</insert>
+	
+	<insert id="addMovieGenre" parameterType="MovieGenre">
+		insert into movie_genre
+		(id, movie_id, genre_id)
+		values
+		(seq_movie_genre.nextval, #{movieId}, #{genreId})
+	</insert>
+	
+	<insert id="addGenreTransalation" parameterType="GenreTranslation">
+		insert into genre_translation
+		(id, type, lang_iso, genre_id)
+		values
+		(seq_genre_translation.nextval, #{type}, 'ko', #{genre.id})
+	</insert>
+	
+	<insert id="addMovieImage" parameterType="MovieImage">
+		insert into movie_images
+		(id, image_uri, movie_id)
+		values
+		(seq_movie_images.nextval, #{imageUri}, #{movie.id})
+	</insert>
+	
+	<insert id="addMovieTranslation" parameterType="MovieTranslation">
+		insert into movie_translation
+		(id, name, publish_country, description, movie_id, lang_iso)
+		values
+		(seq_movie_translation.nextval, #{name}, #{publishCountry}, #{description}, #{movie.id}, 'ko')
+	</insert>
+<!-- 영화 조회  -->
+	<select id="searchByMovieTranslation" parameterType="Criteria" resultType="MovieTranslation">
+		select
+			A.name  			name,
+			B.id				"movie.id",
+			B.age_limit			"movie.ageLimit",
+			B.publish_date		"movie.publishDate",
+			B.open_date			"movie.openDate",
+			B.close_date		"movie.closeDate",
+			B.dubbed			"movie.dubbed"
+				
+		from movie_translation A, movies B
+		where A.movie_id = B.id
+			<if test="keyword != null || keyword != '' ">
+				<choose>
+					<when test="opt == 'name' ">
+					and A.name like '%' || #{keyword} || '%'
+					</when>
+					<when test="opt == 'publishDate'">
+					and B.publish_date like '%' || #{keyword} || '%'
+					</when>
+					<when test="opt == 'openDate' ">
+					and B.open_date like '%' || #{keyword} || '%'
+					</when>
+					<when test="opt == 'closeDate' ">
+					and B.close_date like '%' || #{keyword} || '%'
+					</when>
+				</choose>
+			</if>
+	</select>
+<!-- 영화 상세정보  -->
+	<select id="getMovieTranslation" parameterType="int" resultType="MovieTranslation">
+		select
+			id				id,
+			name			name,
+			description		description,
+			publish_country	publishCountry,
+			lang_iso		langiso,
+			lang_default	langdefault,
+			movie_id		"movie.id"
+		from 
+			movie_translation
+		where 
+			movie_id = #{value}
+	</select>
+	
+	<select id="getMovieImage" parameterType="int" resultType="MovieImage">
+		select
+			id			id,
+			image_uri	imageUri,
+			movie_id	"movie.id"
+		from 
+			MOVIE_IMAGES
+		where
+			movie_id = #{value}
+	</select>
+	
+	<select id="getGenreTranslation" parameterType="int" resultType="GenreTranslation">
+		select
+			A.id				id,
+			A.type				type,
+			A.lang_iso			langiso,
+			A.lang_default		langdefault,
+			A.genre_id			"genre.id",			
+			B.movie_id			"movie.id"
+		from 
+			genre_translation A , movie_genre B
+		where 
+			A.genre_id = B.genre_id
+		and
+			B.movie_id = #{value}
+	</select>
+	
+	<select id="getMovie" parameterType="int" resultType="Movie">
+		select
+			id				id,
+			publish_date	publishDate,
+			open_date		openDate,
+			age_limit		ageLimit,
+			close_date		closeDate,
+			dubbed			dubbed
+		from
+			movies
+		where
+			id = #{value}
+		
+	</select>
+<!-- 상영종료 추가하기 -->
+	<update id="updateCloseDate" parameterType="int">
+		update
+			movies
+		set 
+			close_date = SYSDATE
+		where
+			id = #{value}
+	</update>
+	
+<!-- 시간표등록 등록가능영화 조회 -->
+	<select id="getMovieTranslationsByDate" parameterType="date" resultType="MovieTranslation">
+		select 
+			A.name			name,
+			B.id			id,
+			B.open_date		openDate,
+			B.close_date	closeDate,
+			B.dubbed		dubbed
+		from 
+			movie_translation A, movies B
+		where   
+			A.MOVIE_ID = B.ID
+		and
+			B.OPEN_DATE &lt;= #{value}
+		and 
+			(#{value} &lt; B.CLOSE_DATE  
+		or	
+			B.CLOSE_DATE is null)
+	</select>
+<!-- 시간표등록  -->
+	<insert id="addMovieTimetable" parameterType="MovieTimetable">
+		insert into movie_timetable
+			(id, started_at, ended_at, screen_movie_id, ordered)
+		values
+			(seq_movie_timetable.nextval, #{startedAt}, #{endedAt}, #{screenMovie.id}, #{ordered})
+		
+	</insert>
+	
+	<insert id="addScreenMovie" parameterType="ScreenMovie">
+		insert into screen_movies
+			(id, screen_id, movie_id)
+		values
+			(#{id}, #{screen.id}, #{movie.id})
+	
+	</insert>
+	<select id="getScreenMovieSeq" resultType="int" >
+		select seq_screen_movies.nextval from dual
+	</select>
+<!-- 특정 연/월/일에 상영하는 모든 영화 조회 (중복 제외) -->
+	<select id="getMoviesByDate" parameterType="date" resultType="MovieTranslation">
+		select
+			distinct(A.id)			"movie.id"
+			,D.name					name
+			,A.age_limit			"movie.ageLimit"
+		from movies A, screen_movies B, movie_timetable C, movie_translation D
+		where A.id = B.movie_id
+		and B.id = C.screen_movie_id
+		and A.id = D.movie_id
+		and C.started_at >= to_date(to_char(#{value}, 'yyyy-mm-dd') || '06:00', 'yyyy-mm-dd hh24:mi')
+		and C.started_at &lt;= to_date(to_char(#{value} + 1, 'yyyy-mm-dd') || '05:00', 'yyyy-mm-dd hh24:mi')
+	</select>
+
+	<!-- 특정 연/월/일 + Movie_id로 상영시간 조회  map에 playingDate, movieId 이름으로 담기 -->
+	<select id="getMovieTimetableByDateNMovieId" parameterType="hashmap" resultType="MovieTimetable">
+		select
+			C.id					id
+			,C.started_at			startedAt
+			,C.ended_at				endedAt
+			,C.online_purchase		onlinePurchase
+			,C.offline_purchase		offlinePurchase
+			,C.screen_movie_id		"screenMovie.id"
+			,C.ordered				ordered
+			,D.id					"screenMovie.screen.id"
+			,D.name					"screenMovie.screen.name"
+			,D.seats_count			"screenMovie.screen.seatsCount"
+		from movies A, screen_movies B, movie_timetable C, screens D
+		where A.id = B.movie_id
+		and B.id = C.screen_movie_id
+		and B.screen_id = D.id
+		and C.started_at >= to_date(to_char(#{playingDate}, 'yyyy-mm-dd') || '06:00', 'yyyy-mm-dd hh24:mi')
+		and C.started_at &lt;= to_date(to_char(#{playingDate} + 1, 'yyyy-mm-dd') || '05:00', 'yyyy-mm-dd hh24:mi')
+		and A.id = #{movieId}
+		order by started_at
+	</select>
+	
+	<!-- 단순 ID로 MovieTimetable 조회 (+ screen_movies, movies, screen 같이 조회) -->
+	<select id="getMovieTimetableById" parameterType="int" resultType="MovieTimeTable">
+		select
+			C.id					id
+			,C.started_at			startedAt
+			,C.ended_at				endedAt
+			,C.online_purchase		onlinePurchase
+			,C.offline_purchase		offlinePurchase
+			,C.screen_movie_id		"screenMovie.id"
+			,C.ordered				ordered
+			,D.id					"screenMovie.screen.id"
+			,D.name					"screenMovie.screen.name"
+			,D.seats_count			"screenMovie.screen.seatsCount"
+		from movies A, screen_movies B, movie_timetable C, screens D
+		where A.id = B.movie_id
+		and B.id = C.screen_movie_id
+		and B.screen_id = D.id
+		and C.id = #{value}
+	</select>
+	
+	<!--위에거 승환이버전 -->
+	<select id="getMovieTimetableByscreenId" parameterType="int" resultType="MovieTimeTable">
+		select
+			C.id					id
+			,C.started_at			startedAt
+			,C.ended_at				endedAt
+			,C.online_purchase		onlinePurchase
+			,C.offline_purchase		offlinePurchase
+			,C.screen_movie_id		"screenMovie.id"
+			,C.ordered				ordered
+			,B.movie_id				"movie.id"
+			,D.id					"screenMovie.screen.id"
+			,D.name					"screenMovie.screen.name"
+			,D.seats_count			"screenMovie.screen.seatsCount"
+		from movies A, screen_movies B, movie_timetable C, screens D
+		where A.id = B.movie_id
+		and B.id = C.screen_movie_id
+		and B.screen_id = D.id
+		and B.movie_id = #{value}
+	
+	</select>
+	
+	<!-- 시간표 조회 특정 연/월/일에 상영하는 모든 영화 조회 -->
+	<select id="getAllMoviesByDate" parameterType="date" resultType="SelectTimetable">
+		select
+		    C.id   				id,
+			D.NAME  			screenName,
+			C.ORDERED  			ordered,
+			E.NAME    			title,
+			C.STARTED_AT 		startedAt,
+			C.ENDED_AT 			endedAt,
+			C.ONLINE_PURCHASE	onlinePurchase,
+			C.OFFLINE_PURCHASE	offlinePurchase,
+			D.SEATS_COUNT 	seatsCount
+					
+		from movies A, screen_movies B, movie_timetable C, screens D ,MOVIE_TRANSLATION E
+		where E.MOVIE_ID = A.id 
+		and A.id = B.movie_id
+		and B.id = C.screen_movie_id
+		and B.screen_id = D.id
+		and C.started_at >= to_date(to_char(#{value}, 'yyyy-mm-dd') || '06:00', 'yyyy-mm-dd hh24:mi')
+		and C.started_at &lt;= to_date(to_char(#{value} + 1, 'yyyy-mm-dd') || '05:00', 'yyyy-mm-dd hh24:mi')
+		order by D.NAME, C.ORDERED
+	</select>
+	
+	<select id="getMovieTranslateByScreenMovieId" parameterType="int" resultType="MovieTranslation">
+		select
+			A.id 			"movie.id"
+			,A.age_limit 	"movie.ageLimit"
+			,B.id			id
+			,B.name		name
+		from movies A, movie_translation B, screen_movies C
+		where A.id = B.movie_id
+		and A.id = C.movie_id
+		and C.id = #{value}		
+	</select>
+	
+	
+	<!-- 시간표 조회 특정 연/월/일에 상영하는 모든 영화 조회 -->
+	<select id="getAllScreenNameByDate" parameterType="date" resultType="SelectTimetable">
+		select 
+		distinct(D.NAME)	as screenName		
+		from movies A, screen_movies B, movie_timetable C, screens D ,MOVIE_TRANSLATION E
+		where E.MOVIE_ID = A.id 
+		and A.id = B.movie_id
+		and B.id = C.screen_movie_id
+		and B.screen_id = D.id
+		and C.started_at >= to_date(to_char(#{value}, 'yyyy-mm-dd') || '06:00', 'yyyy-mm-dd hh24:mi')
+		and C.started_at &lt;= to_date(to_char(#{value} + 1, 'yyyy-mm-dd') || '05:00', 'yyyy-mm-dd hh24:mi')
+		order by D.NAME
+	</select>
+	
+	<!-- 영화 온라인/오프라인 예매여부 변경 -->
+<update id="updateMovieManagement" parameterType="MovieTimeTable">
+	update movie_timetable 
+	<set>
+		online_purchase = #{onlinePurchase},
+		offline_purchase = #{offlinePurchase}
+	</set> 
+	where
+	  id = #{id}
+</update>
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

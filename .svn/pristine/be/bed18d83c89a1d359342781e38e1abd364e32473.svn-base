@@ -1,0 +1,11 @@
+package com.es.pos.mapper;
+
+import java.util.List;
+
+import com.es.pos.vo.TicketReceipt;
+
+public interface TicketMapper {
+
+	List<TicketReceipt> getCardSelect(String creditNo);
+	TicketReceipt getCardDetailSelect(int customerId);
+}

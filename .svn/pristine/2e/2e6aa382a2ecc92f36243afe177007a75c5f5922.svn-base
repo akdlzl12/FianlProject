@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.common.mapper.HomeMainMapper">
+	<select id="getMovieRankName" parameterType="MonthDate" resultType="MovieRankNameForm">
+		select
+	        *
+		from
+		    (select
+		        movieName "name", 
+		        rank() over (order by no desc) as movieRank,
+		        no			"no",
+		        location	"location"
+		    from    
+		        (select
+		            F.NAME as movieName, 
+		            count(*) as no,
+		            F.PUBLISH_COUNTRY as location
+		        from
+		            TICKET_RECEIPTS A, TICKETS B, MOVIE_TIMETABLE C, SCREEN_MOVIES D, MOVIES E, MOVIE_TRANSLATION F
+		        where
+		            A.id = B.TICKET_RECEIPT_ID
+		        and
+		            B.MOVIE_TIMETABLE_ID = C.ID 
+		        and
+		            C.SCREEN_MOVIE_ID = D.ID
+		        and
+		            D.MOVIE_ID = E.ID
+		        and
+		            E.ID = F.MOVIE_ID
+		        <foreach collection="startDate" index="index" item="dateValue">
+		        and			
+		            A.PURCHASE_DATE >= #{dateValue}
+		        </foreach>
+		        <foreach collection="endDate" index="index" item="dateValue">
+		        and
+		            A.PURCHASE_DATE &lt;= #{dateValue}
+		        </foreach>    
+		        group by 
+		            F.NAME, F.PUBLISH_COUNTRY))
+		where
+		    movieRank &lt;= 5
+	</select>
+	
+	<select id="getMovieAudienceStatisticsSelect" parameterType="MonthDate" resultType="MovieRankNameForm">
+		with tmp as 
+			(select
+			  to_char(A.PURCHASE_DATE, 'mm') months, F.name, count(B.SEAT_ID) qty
+			from
+			    TICKET_RECEIPTS A, TICKETS B, MOVIE_TIMETABLE C, SCREEN_MOVIES D, MOVIES E, MOVIE_TRANSLATION F
+			where    
+			    A.ID = B.TICKET_RECEIPT_ID
+			and
+			    B.MOVIE_TIMETABLE_ID = C.ID
+			and
+			    C.SCREEN_MOVIE_ID = D.ID
+			and
+			    D.MOVIE_ID = E.ID
+			and
+			    E.ID = F.MOVIE_ID
+			<foreach collection="startDate" index="index" item="dateValue">    
+			and
+			    A.PURCHASE_DATE >= #{dateValue}
+			</foreach>
+			<foreach collection="endDate" index="index" item="dateValue">    
+			and 
+			    A.PURCHASE_DATE &lt;= #{dateValue}
+			</foreach>
+			group by 
+			    to_char(A.PURCHASE_DATE, 'mm'), F.name)
+			    
+			select r movieRank, months month, name name, qty no
+			from(select  months, name, qty, rank() over(order by qty desc)  r
+			     from tmp
+			     where months = #{threeMonthDate})
+			where r &lt;= 3
+			union all 
+			select r movieRank, months month, name name, qty no
+			from(select months, name, qty, rank() over(order by qty desc)  r
+			     from tmp
+			     where months = #{twoMonthDate})
+			where r &lt;= 3
+			union all
+			select r movieRank, months month, name name, qty no
+			from(select months, name, qty, rank() over(order by qty desc)  r
+			     from tmp
+			     where months = #{oneMonthDate})
+			where r &lt;= 3
+	</select>
+	
+	<select id="getMostFeaturedFilms" parameterType="MonthDate" resultType="MovieRankNameForm">
+		with tmp as (select
+			            D.NAME name, 
+			            count(A.STARTED_AT) qty,
+			            to_char(A.STARTED_AT, 'mm') months
+			        from
+			            MOVIE_TIMETABLE A, SCREEN_MOVIES B, MOVIES C, MOVIE_TRANSLATION D
+			        where
+			            A.SCREEN_MOVIE_ID = B.ID
+			        and
+			            B.movie_id = C.ID
+			        and
+			            c.id = D.MOVIE_ID
+			        <foreach collection="startDate" index="index" item="dateValue">    
+			        and
+			            A.STARTED_AT >= #{dateValue}
+			        </foreach>
+			        <foreach collection="endDate" index="index" item="dateValue">    
+			        and
+			            A.ENDED_AT &lt;= #{dateValue}
+			        </foreach>    
+			        group by 
+			            to_char(A.STARTED_AT, 'mm'), D.name)
+			select r movieRank, months month, name name, qty no 
+			from(select months, name, qty, rank() over(order by qty desc) r 
+			from tmp where months = #{threeMonthDate}) 
+			where r &lt;= 3
+			union all 
+			select r movieRank, months month, name name, qty no 
+			from(select months, name, qty, rank() over(order by qty desc) r 
+			from tmp where months = #{twoMonthDate}) 
+			where r &lt;= 3 
+			union all 
+			select r movieRank, months month, name name, qty no 
+			from(select months, name, qty, rank() over(order by qty desc) r 
+			from tmp where months = #{oneMonthDate}) 
+			where r &lt;= 3
+	</select>
+	
+	<select id="getOnlineOfflinePaymentMetrics" parameterType="MonthDate" resultType="OnlineOfflinePaymentMetrics">
+		 select 
+		        purchase_type                    purchaseType, 
+		        count(purchase_type)             counts, 
+		        to_char(purchase_date, 'mm')     months
+		 from 
+		     (select
+		          case
+		             when purchase_type = 'M' then 'OFFLINE'
+		             when purchase_type = 'C' then 'OFFLINE'
+		             else 'ONLINE'
+		         end purchase_type, 
+		         decode(purchase_type, 'M', 'OFFLINE',
+		                              'C', 'OFFLINE',
+		                              'ONLINE'),
+		     purchase_date                          
+		     from ticket_receipts)
+		 <where>
+		 <foreach collection="startDate" index="index" item="dateValue">    
+		     purchase_date >= #{dateValue}
+		 </foreach>
+		 <foreach collection="endDate" index="index" item="dateValue">   
+		 and    
+		     purchase_date &lt;= #{dateValue}
+		 </foreach>    
+		 </where>    
+		 group by purchase_type, to_char(purchase_date, 'mm')
+		 order by to_char(purchase_date, 'mm') desc
+	</select>
+	
+</mapper>

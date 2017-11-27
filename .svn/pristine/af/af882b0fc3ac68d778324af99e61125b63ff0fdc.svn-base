@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.financial.mapper.CouponMapper">
+	<insert id="addCoupon" parameterType="Coupon">
+		insert into coupones (
+		ID,
+		DISTRIBUTE_TYPE,		
+		DISTRIBUTE_UNTIL,		
+		RECEIVED, 
+		REASON, 
+		CUSTOMER_RANK_ID,		
+		NAME					
+		)
+		values
+		(id_seq.nextval, #{distributeType}, #{distributUntil}, #{RECEIVED}, #{reason}, #{"customerRank.id"}, #{name})
+	</insert> 
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

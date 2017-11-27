@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.financial.mapper.CouponMapper">
+	<select id="couponId" resultType="int">
+		select seq_coupones.nextval
+		from dual
+	</select>
+	<insert id="addCoupon" parameterType="Coupon">
+		insert into coupones (
+		ID,
+		DISTRIBUTE_TYPE,		
+		DISTRIBUTE_UNTIL,		
+		REASON, 
+		NAME					
+		)
+		values
+		(#{id}, #{distributeType}, #{distributUntil}, #{reason}, #{name})
+	</insert> 
+	
+	<insert id="addCouponCustomer">
+		insert into coupon_customers
+		id,
+		expired_at
+		values
+		(seq_coupon_customers.nextval, #{expiredAt})
+	</insert>
+	
+ 	<update id="changeReceived" parameterType="int">
+		update gift_customers
+		set RECEIVED = 1
+		where id = #{id}
+	</update> 
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

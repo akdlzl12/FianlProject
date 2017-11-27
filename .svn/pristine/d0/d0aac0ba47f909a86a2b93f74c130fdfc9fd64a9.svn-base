@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.employee.mapper.EmployeeMapper">
+	<select id="readNextId" resultType="int">
+		select seq_employees.nextval
+		from dual
+	</select>
+	<select id="readTotalRow" resultType="int">
+		select count(*)
+		from employees
+	</select>
+	
+	<insert id="insert" parameterType="Employee">
+		insert into employees 
+			(id, name, address, phone, hourly_pay, gender, account_no, job_type, hired_at, birth)
+		values 
+			(#{id}, #{name}, #{address}, #{phone}, #{hourlyPay}, #{gender}, #{accountNo}, #{jobType}, #{hiredAt}, #{birth})
+	</insert>
+	
+	<select id="list" parameterType="Pagination" resultType="Employee">
+		select id, phone, name, jobType
+		from (
+			select 
+				id,
+				phone,
+				name,
+				job_type 		as jobType,
+				row_number() over (order by id) as rn
+			from 
+				employees
+			
+			<if test="opt != null">
+				<choose>
+					<when test="opt == 'id'">
+						where ${opt} = #{keyword}
+					</when>
+					<otherwise>
+						where ${opt} like #{keyword} || '%'	
+					</otherwise>
+				</choose>
+				
+			</if>
+		)
+		where
+			rn between #{beginIndex} and #{endIndex}
+	</select>
+	
+	<select id="read" parameterType="int" resultType="Employee">
+	
+	</select>
+	
+	<update id="update" parameterType="Employee">
+	
+	</update>
+	
+	<update id="delete" parameterType="int">
+	
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

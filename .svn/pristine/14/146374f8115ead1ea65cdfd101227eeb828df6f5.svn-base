@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.pos.mapper.PosTestMapper">
+
+	<select id="getEmployeeByIdentifier" parameterType="long" resultType="Employee">
+		select 
+			id
+			,name
+			,address
+			,phone
+			,hourly_pay
+			,gender
+			,account_no					accountNo
+			,job_type					jobType
+			,hired_at					hiredAt
+			,dismissed_at				dismissedAt
+			,birth						birth	
+		from employees
+		where to_char(birth, 'yymmdd') || replace(substr(phone, 4), '-', '') = #{value}
+	</select>
+	
+	<select id="getMoviesByDate" parameterType="date" resultType="MovieTranslation">
+		select
+			distinct(A.id)			"movie.id"
+			,D.name					name
+			,A.age_limit			"movie.ageLimit"
+		from movies A, screen_movies B, movie_timetable C, movie_translation D
+		where A.id = B.movie_id
+		and B.id = C.screen_movie_id
+		and A.id = D.movie_id
+		and C.started_at >= to_date(to_char(#{value}, 'yyyy-mm-dd') || '06:00', 'yyyy-mm-dd hh24:mi')
+		and C.started_at &lt;= to_date(to_char(#{value} + 1, 'yyyy-mm-dd') || '05:00', 'yyyy-mm-dd hh24:mi')
+	</select>
+	
+	<select id="getMovieTimetableByDateNMovieId" parameterType="hashmap" resultType="MovieTimetable">
+		select
+			C.id					id
+			,C.started_at			startedAt
+			,C.ended_at				endedAt
+			,C.online_purchase		onlinePurchase
+			,C.offline_purchase		offlinePurchase
+			,C.screen_movie_id		"screenMovie.id"
+			,C.ordered				ordered
+			,D.id					"screenMovie.screen.id"
+			,D.name					"screenMovie.screen.name"
+			,D.seats_count			"screenMovie.screen.seatsCount"
+		from movies A, screen_movies B, movie_timetable C, screens D
+		where A.id = B.movie_id
+		and B.id = C.screen_movie_id
+		and B.screen_id = D.id
+		and C.started_at >= to_date(to_char(#{playingDate}, 'yyyy-mm-dd') || '06:00', 'yyyy-mm-dd hh24:mi')
+		and C.started_at &lt;= to_date(to_char(#{playingDate} + 1, 'yyyy-mm-dd') || '05:00', 'yyyy-mm-dd hh24:mi')
+		and A.id = #{movieId}
+		order by started_at
+	</select>
+	
+	<select id="getMovieTimetableById" parameterType="int" resultType="MovieTimeTable">
+		select
+			C.id					id
+			,C.started_at			startedAt
+			,C.ended_at				endedAt
+			,C.online_purchase		onlinePurchase
+			,C.offline_purchase		offlinePurchase
+			,C.screen_movie_id		"screenMovie.id"
+			,C.ordered				ordered
+			,D.id					"screenMovie.screen.id"
+			,D.name					"screenMovie.screen.name"
+			,D.seats_count			"screenMovie.screen.seatsCount"
+		from movies A, screen_movies B, movie_timetable C, screens D
+		where A.id = B.movie_id
+		and B.id = C.screen_movie_id
+		and B.screen_id = D.id
+		and C.id = #{value}
+	</select>
+			
+	<select id="getSeatBySeatId" parameterType="int" resultType="Seat">
+		select
+			id
+			,status
+			,detail
+			,name
+		from seats
+		where id = #{value}
+	</select>
+	
+	<select id="getSeatsByScreenId" parameterType="int" resultType="Seat">
+		select
+			A.id				"screen.id"
+			,A.seats_count		"screen.seatsCount"
+			,A.NAME				"screen.name"
+			,B.id				id
+			,B.status			status
+			,B.detail			detail
+			,B.name				name
+		from screens A, seats B
+		where A.id = B.screen_id
+		and A.id = #{value}
+		order by B.id
+	</select>
+	
+	<select id="getCouponesByCustomerId" parameterType="int" resultType="CouponCustomer">
+		select
+			A.id					id
+			,A.received_at			receivedAt
+			,A.expired_at			expiredAt
+			,B.id					"coupon.id"
+			,B.distribute_type		"coupon.distributeType"
+			,B.distribute_until		"coupon.distributeUntil"
+			,B.name					"coupon.name"
+		from coupon_customers A, coupones B
+		where B.id = A.coupon_id
+		and A.customer_id = #{value}
+		and A.used = 0
+		and A.expired_at >= sysdate
+	</select>
+	
+	<select id="getCouponCustomerById" parameterType="int" resultType="CouponCustomer">
+		select
+			id
+			,used
+			,received_at		receivedAt
+			,expired_at		expriedAt
+			,customer_id		"customer.id"
+			,coupon_id		"coupon.id"
+		from coupon_customers
+		where id = #{value}
+	</select>
+	
+	<select id="getMovieTranslateByScreenMovieId" parameterType="int" resultType="MovieTranslation">
+		select
+			A.id 			"movie.id"
+			,A.age_limit 	"movie.ageLimit"
+			,B.id			id
+			,B.name		name
+		from movies A, movie_translation B, screen_movies C
+		where A.id = B.movie_id
+		and A.id = C.movie_id
+		and C.id = #{value}		
+	</select>
+	
+	<update id="updateCouponCustomerInfo" parameterType="CouponCustomer">
+		update coupon_customers
+		<set>
+			<if test="used != null">
+				used = #{used},
+			</if>
+			<if test="receivedAt != null">
+				received_at = #{receivedAt},
+			</if>
+			<if test="expiredAt != null">
+				expired_at = #{expiredAt},
+			</if>
+			<if test="ticketReceipt != null">
+				ticket_receipt_id = #{ticketReceipt.id,jdbcType=NUMERIC}
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<update id="updateCustomerInfo" parameterType="Customer">
+		update customers
+		<set>
+			<if test="password != null">
+				password = #{password},
+			</if>
+			<if test="phone != null">
+				phone = #{phone},
+			</if>
+			<if test="email != null">
+				email = #{email},
+			</if>
+			<if test="miliege != null">
+				miliege = #{miliege},
+			</if>
+			<if test="imageUri != null">
+				image_uri = #{imageUri},
+			</if>
+			<if test="deleted != null">
+				deleted = #{deleted},
+			</if>
+			<if test="thirdParty != null">
+				third_party = #{thirdParty},
+			</if>
+			<if test="updatedAt != null">
+				updated_at = #{updatedAt},
+			</if>
+			<if test="customerRank.id != null">
+				customer_rank_id = #{customerRank.id},
+			</if>
+			<if test="customerTypes.id != null">
+				customer_type_id = #{customerTypes.id},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+</mapper>

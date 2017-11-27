@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.management.mapper.DiscountMapper">
+
+	<!-- 0 or -값이면 전체검색 -->
+	<select id="getDiscount" parameterType="int" resultType="Discount">
+		select 
+			id
+			,name
+			,detail
+			,discount_percent		discountPercent
+			,started_date			startedDate
+			,end_date				endDate
+			,discount_type			discountType
+			,discount_price			discountPrice
+			,customer_type_id		"customerType.id"
+		from discounts
+		<where>
+			<if test="value > 0">
+				and id = #{value}
+			</if>
+		</where>
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

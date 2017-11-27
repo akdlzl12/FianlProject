@@ -1,0 +1,88 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<ul class="ul-main-side">
+	<li class="li-main-side">
+	
+		<h3 class="h3-sub-title">운영<div class="text-right-on-same-line"><i class="fa fa-angle-right"></i></div></h3>
+		<ul class="ul-side">
+			<li class="li-side">
+				<h4>고객 관리</h4>
+				<ul>
+					<li class="${side_active eq 'register' ? 'active' : '' }"><a href="/management/informationSelect.esc">고객 정보 조회</a></li>
+					<li class="${side_active eq 'search' ? 'active' : '' }"><a href="/management/cardHistory.esc">카드 내역 조회</a></li>
+				</ul>
+				<h4>티켓 조회</h4>
+				<ul>
+					<li class="${side_active eq 'register' ? 'active' : '' }"><a href="/management/ticketRePrint.esc">티켓 재출력</a></li>
+				</ul>
+				<h4>단말기 관리</h4>
+				<ul>
+					<li class="${side_active eq 'register' ? 'active' : '' }"><a href="/management/KeyInManagement.esc">키인 관리</a></li>
+					<li class="${side_active eq 'search' ? 'active' : '' }"><a href="/management/discountEvent.esc">할인 이벤트 관리</a></li>
+				</ul>
+				<h4>분실물 관리</h4>
+				<ul>
+					<li class="${side_active eq 'register' ? 'active' : '' }"><a href="/management/lostAndFound.esc">분실물 조회/처리</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	<li class="li-main-side">
+		<h3 class="h3-sub-title">상영<div class="text-right-on-same-line"><i class="fa fa-angle-right"></i></div></h3>
+		<ul class="ul-side">
+			<li class="li-side">
+				<h4>상영 시간표</h4>
+				<ul>
+					<li class="${side_active eq 'm1one' ? 'active' : '' }"><a href="/movie/timetableadd.esc">시간표 등록</a></li>
+					<li class="${side_active eq 'm1two' ? 'active' : '' }"><a href="/movie/timetableinfo.esc">시간표 조회</a></li>
+				</ul>
+			</li>
+			<li class="li-side">
+				<h4>상영관 관리</h4>
+				<ul>
+					<li class="${side_active eq 'm2one' ? 'active' : '' }"><a href="/movie/movieseat.esc">상영관 좌석관리</a></li>
+					<li class="${side_active eq 'm2two' ? 'active' : '' }"><a href="/movie/moviemanagement.esc">상영 관리</a></li>
+				</ul>
+			</li>
+			<li class="li-side">
+				<h4>영화 관리</h4>
+				<ul>
+					<li class="${side_active eq 'm3one' ? 'active' : '' }"><a href="/movie/movieadd.esc">영화 등록</a></li>
+					<li class="${side_active eq 'm3two' ? 'active' : '' }"><a href="/movie/movielist.esc">영화 조회</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	<li class="li-main-side">
+		<h3 class="h3-sub-title">직원<div class="text-right-on-same-line"><i class="fa fa-angle-right"></i></div></h3>
+		<ul class="ul-side">
+			<li class="li-side">
+				<h4>직원관리</h4>
+				<ul>
+					<li class="${side_active eq 'register' ? 'active' : '' }"><a href="/employee/index.esc">직원 등록</a></li>
+					<li class="${side_active eq 'search' ? 'active' : '' }"><a href="/employee/search.esc?pageNo=1">직원 조회</a></li>
+					<li class="${side_active eq 'management' ? 'active' : '' }"><a href="/employee/management.esc">근태 관리</a></li>
+					<li class="${side_active eq 'punishment' ? 'active' : '' }"><a href="/employee/punishment.esc?pageNo=1">징계 관리</a></li>
+					<li class="${side_active eq 'salary' ? 'active' : '' }"><a href="/employee/salary_manage.esc?pageNo=1">급여 관리</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	<li class="li-main-side">
+		<h3 class="h3-sub-title">정산<div class="text-right-on-same-line"><i class="fa fa-angle-right"></i></div></h3>
+		<ul class="ul-side">
+			<li class="li-side">
+				<h4>쿠폰 / 사은품 관리</h4>
+				<ul>
+					<li class="${side_active eq 'management' ? 'active' : '' }"><a href="/financial/managementCoupon.esc">쿠폰 / 사은품 조회</a></li>
+					<li class="${side_active eq 'search' ? 'active' : '' }"><a href="/financial/searchCoupon.esc">쿠폰 / 사은품 지급</a></li>
+				</ul>
+				<h4>포스별 정산 관리</h4>
+				<ul>
+					<li class="${side_active eq 'calculate' ? 'active' : '' }"><a href="/financial/posCalculate.esc">단말기 정산</a></li>
+					<li class="${side_active eq 'calculate' ? 'active' : '' }"><a href="/financial/dayCalculate.esc">일일 정산</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+</ul>

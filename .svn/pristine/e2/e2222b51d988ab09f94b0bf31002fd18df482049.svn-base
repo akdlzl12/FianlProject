@@ -1,0 +1,5 @@
+package com.es.pos.mapper;
+
+public interface TicketMapper {
+
+}

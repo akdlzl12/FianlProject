@@ -1,0 +1,5 @@
+package com.es.management.service;
+
+public class DiscountEventImpl {
+
+}

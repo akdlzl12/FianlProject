@@ -1,0 +1,19 @@
+package com.es.movie.rest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.es.movie.service.TimeTableInfoService;
+
+@RestController
+public class TimetableInfoAjaxController {
+	
+	/*@Autowired
+	private TimeTableInfoService timeTableInfoService;
+	
+	@RequestMapping("/.esc")
+	@ResponseBody
+	public List<>*/
+}

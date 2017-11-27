@@ -1,0 +1,12 @@
+package com.es.employee.service;
+
+import java.util.List;
+
+import com.es.common.vo.Pagination;
+import com.es.employee.vo.Employee;
+
+public interface EmployeeService {
+	public Employee register();
+	public List<Employee> searchEmployees(Pagination pagination);
+	public Employee detail();
+}

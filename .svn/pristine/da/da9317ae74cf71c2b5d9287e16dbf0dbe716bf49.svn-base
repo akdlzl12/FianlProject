@@ -1,0 +1,27 @@
+package com.es.pos.web;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.es.pos.service.LogService;
+
+@Controller
+public class LoginController {
+
+	@Autowired
+	private LogService logService;
+	
+	@GetMapping("/login.esc")
+	public String form() {
+		return "loginform";
+	}
+	
+	@PostMapping("/login.esc")
+	public String login(long id, long pwd) {
+		System.out.println(id + pwd);
+		logService.findEmployeeById(id, pwd);
+		return "redirect:/home.esc";
+	}
+}

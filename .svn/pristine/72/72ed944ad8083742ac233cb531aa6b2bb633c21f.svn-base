@@ -1,0 +1,33 @@
+package com.es.management.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.es.management.mapper.TicketSelectMapper;
+import com.es.pos.vo.PosLoginHistory;
+import com.es.pos.vo.TicketReceipt;
+
+@Service
+public class TicketRePrintImpl implements TicketRePrintService{
+
+	@Autowired
+	private TicketSelectMapper ticketSelectMapper;
+	
+	@Override
+	public List<TicketReceipt> getRidSelect(String rid) {
+		
+		return ticketSelectMapper.getRidSelect(rid);
+	}
+	
+	@Override
+	public TicketReceipt getRidDetailSelect(TicketReceipt ticketReceipt) {
+		int customerId = ticketReceipt.getId();
+		PosLoginHistory posLoginHistory = ticketSelectMapper.getFosAndDateSelect(ticketReceipt);
+		ticketSelectMapper.getEmpNameSelect(posLoginHistory);
+		
+		return ticketSelectMapper.getRidDetailSelect(customerId);
+	}
+	
+	
+}

@@ -1,0 +1,16 @@
+package com.es.employee.mapper;
+
+import java.util.List;
+
+import com.es.common.vo.Pagination;
+import com.es.employee.vo.Employee;
+
+public interface EmployeeMapper {
+	int readNextId();
+	void insert(Employee employee);
+	List<Employee> list(Pagination pagination);
+	Employee read(int id);
+	void update(Employee employee);
+	void delete(int id);
+	int readTotalRow();
+}

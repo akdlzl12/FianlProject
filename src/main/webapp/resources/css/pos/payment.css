@@ -1,0 +1,90 @@
+@charset "UTF-8";
+
+#main-box {
+    border: 10px solid #6a5dc0;
+    width: 1770px;
+    height: 754px;
+}
+#price-box {
+    margin: 20px;
+    height: 350px;
+    font-size: 17px;
+}
+tr.discount-tr {
+	font-weight: bolder;
+	color: red;
+}
+#select-info-box {
+    margin: 20px;
+    height: 300px;
+    font-size: 17px;
+}
+#payment-info-box {
+    margin: 20px;
+    height: 400px;
+}
+#discount-select-box {
+    margin: 20px;
+    height: 251px;
+}
+#payment-radio-box {
+    margin: 15px;
+    margin-left: 200px;
+    font-size: 23px;
+}
+#payment-radio-box input[type='radio'] {
+    margin: 10px;
+    margin-left: 150px;
+    width: 20px;
+    height: 20px;
+}
+.payment-border {
+    margin: 30px;
+}
+label.payment-info-label {
+    margin-top: 20px;
+    margin-right: -20px;
+}
+div.payment-info {
+    margin-top: 10px;
+    padding-left: 50px;
+    border: 3px solid #6a5dc0;
+    width: 330px;
+    height: 50px;
+    font-size: 32px;
+}
+input#card-no, #taken-price {
+    margin-top: 20px;
+    border: 3px solid #6a5dc0;
+    height: 40px;
+}
+button.cash-btn {
+	margin: 2px;
+	margin-top: 10px;
+	width: 60px;
+}
+#needed-payment-box {
+    height: 200px;
+}
+button.discount-btn {
+    width: 150px;
+}
+#discount-btn-box {
+    margin-left: 20px;
+    height: 200px;
+}
+#coupon-box {
+    margin-top: 20px;
+    height: 400px;
+}
+#point-box {
+    margin-top: 20px;
+    border-top: 1px solid silver;
+}
+#discount-kind-box .btn {
+	margin: 5px;
+}
+#check-emp-form {
+	margin-top: 70px;
+	margin-left: 30px;
+}

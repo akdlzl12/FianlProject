@@ -1,0 +1,62 @@
+package com.es.pos.vo;
+
+public class PaymentForm {
+
+	private int paymentPrice;
+	private int discountPrice;
+	private String purchaseType;
+	private int movieTimetable;
+	private String customerType;
+	private String seat;
+	private int coustomerId;
+	private String usedCoupon;
+	
+	public int getPaymentPrice() {
+		return paymentPrice;
+	}
+	public void setPaymentPrice(int paymentPrice) {
+		this.paymentPrice = paymentPrice;
+	}
+	public int getDiscountPrice() {
+		return discountPrice;
+	}
+	public void setDiscountPrice(int discountPrice) {
+		this.discountPrice = discountPrice;
+	}
+	public String getPurchaseType() {
+		return purchaseType;
+	}
+	public void setPurchaseType(String purchaseType) {
+		this.purchaseType = purchaseType;
+	}
+	public int getMovieTimetable() {
+		return movieTimetable;
+	}
+	public void setMovieTimetable(int movieTimetable) {
+		this.movieTimetable = movieTimetable;
+	}
+	public String getCustomerType() {
+		return customerType;
+	}
+	public void setCustomerType(String customerType) {
+		this.customerType = customerType;
+	}
+	public String getSeat() {
+		return seat;
+	}
+	public void setSeat(String seat) {
+		this.seat = seat;
+	}
+	public int getCoustomerId() {
+		return coustomerId;
+	}
+	public void setCoustomerId(int coustomerId) {
+		this.coustomerId = coustomerId;
+	}
+	public String getUsedCoupon() {
+		return usedCoupon;
+	}
+	public void setUsedCoupon(String usedCoupon) {
+		this.usedCoupon = usedCoupon;
+	}
+}

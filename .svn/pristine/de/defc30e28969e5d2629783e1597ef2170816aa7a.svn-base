@@ -1,0 +1,205 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/common/taglibs.jsp" %>
+<html>
+<head>
+	<title>시간표 등록</title>
+	
+	<%@ include file="/WEB-INF/views/common/head.jsp" %>
+	<style>
+        .auditorium {
+            text-align: center;
+        }
+        th{
+            background-color: #cce4ff;
+        }
+        .movielist {
+            width:85px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+        }
+    </style>
+</head>
+<body>
+	<c:set var="nav_active" value="movie" />
+	
+	<%@ include file="/WEB-INF/views/common/nav.jsp" %>
+	<div class="row">
+		<div class="col-md-2">
+			<c:set var="side_active" value="m1one" />
+			<%@ include file="/WEB-INF/views/movie/common/side_movie.jsp" %>
+		</div>
+		<div class="col-md-10">
+			<div class="container">
+				<div>
+					<label>일자선택 <input type="date" /></label>
+				</div>
+
+				<hr />
+
+				<table class="table table-bordered" style="text-align: center">
+					<colgroup>
+						<col width="8%" ;/>
+						<col width="8%" ;/>
+						<col width="15%" ;/>
+						<col width="8%" ;/>
+						<col width="15%" ;/>
+						<col width="8%" ;/>
+						<col width="15%" ;/>
+						<col width="8%" ;/>
+						<col width="15%" ;/>
+
+					</colgroup>
+					<thead>
+						<tr>
+							<th></th>
+							<th class="auditorium" colspan="2">1관</th>
+							<th class="auditorium" colspan="2">2관</th>
+							<th class="auditorium" colspan="2">3관</th>
+							<th class="auditorium" colspan="2">4관</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1회차</td>
+							<td><select class="movielist">
+									<option>어젯밤에 우리아빠가 다정하신 모습으로</option>
+									<option>등록영화2</option>
+									<option>등록영화3</option>
+							</select></td>
+							<td><input type="text" name="adv-time" placeholder="광고시작시간" />
+								<input type="text" name="start-time" placeholder="영화시작시간" /> <input
+								type="text" name="play-time" placeholder="플레이타임" /> <input
+								type="text" name="end-time" placeholder="영화종료시간" /> <input
+								type="text" name="clean-time" placeholder="청소시간" /></td>
+							<td><select>
+									<option>등록영화1</option>
+									<option>등록영화2</option>
+									<option>등록영화3</option>
+							</select></td>
+							<td><input type="text" name="adv-time" placeholder="광고시작시간" />
+								<input type="text" name="start-time" placeholder="영화시작시간" /> <input
+								type="text" name="play-time" placeholder="플레이타임" /> <input
+								type="text" name="end-time" placeholder="영화종료시간" /> <input
+								type="text" name="clean-time" placeholder="청소시간" /></td>
+							<td><select>
+									<option>등록영화1</option>
+									<option>등록영화2</option>
+									<option>등록영화3</option>
+							</select></td>
+							<td><input type="text" name="adv-time" placeholder="광고시작시간" />
+								<input type="text" name="start-time" placeholder="영화시작시간" /> <input
+								type="text" name="play-time" placeholder="플레이타임" /> <input
+								type="text" name="end-time" placeholder="영화종료시간" /> <input
+								type="text" name="clean-time" placeholder="청소시간" /></td>
+							<td><select>
+									<option>등록영화1</option>
+									<option>등록영화2</option>
+									<option>등록영화3</option>
+							</select></td>
+							<td><input type="text" name="adv-time" placeholder="광고시작시간" />
+								<input type="text" name="start-time" placeholder="영화시작시간" /> <input
+								type="text" name="play-time" placeholder="플레이타임" /> <input
+								type="text" name="end-time" placeholder="영화종료시간" /> <input
+								type="text" name="clean-time" placeholder="청소시간" /></td>
+						</tr>
+						<tr>
+							<td>2회차</td>
+							<td><select>
+									<option>등록영화1</option>
+									<option>등록영화2</option>
+									<option>등록영화3</option>
+							</select></td>
+							<td><input type="text" name="adv-time" placeholder="광고시작시간" />
+								<input type="text" name="start-time" placeholder="영화시작시간" /> <input
+								type="text" name="play-time" placeholder="플레이타임" /> <input
+								type="text" name="end-time" placeholder="영화종료시간" /> <input
+								type="text" name="clean-time" placeholder="청소시간" /></td>
+							<td><select>
+									<option>등록영화1</option>
+									<option>등록영화2</option>
+									<option>등록영화3</option>
+							</select></td>
+							<td><input type="text" name="adv-time" placeholder="광고시작시간" />
+								<input type="text" name="start-time" placeholder="영화시작시간" /> <input
+								type="text" name="play-time" placeholder="플레이타임" /> <input
+								type="text" name="end-time" placeholder="영화종료시간" /> <input
+								type="text" name="clean-time" placeholder="청소시간" /></td>
+							<td><select>
+									<option>등록영화1</option>
+									<option>등록영화2</option>
+									<option>등록영화3</option>
+							</select></td>
+							<td><input type="text" name="adv-time" placeholder="광고시작시간" />
+								<input type="text" name="start-time" placeholder="영화시작시간" /> <input
+								type="text" name="play-time" placeholder="플레이타임" /> <input
+								type="text" name="end-time" placeholder="영화종료시간" /> <input
+								type="text" name="clean-time" placeholder="청소시간" /></td>
+							<td><select>
+									<option>등록영화1</option>
+									<option>등록영화2</option>
+									<option>등록영화3</option>
+							</select></td>
+							<td><input type="text" name="adv-time" placeholder="광고시작시간" />
+								<input type="text" name="start-time" placeholder="영화시작시간" /> <input
+								type="text" name="play-time" placeholder="플레이타임" /> <input
+								type="text" name="end-time" placeholder="영화종료시간" /> <input
+								type="text" name="clean-time" placeholder="청소시간" /></td>
+						</tr>
+						<tr>
+							<td>3회차</td>
+							<td><select>
+									<option>등록영화1</option>
+									<option>등록영화2</option>
+									<option>등록영화3</option>
+							</select></td>
+							<td><input type="text" name="adv-time" placeholder="광고시작시간" />
+								<input type="text" name="start-time" placeholder="영화시작시간" /> <input
+								type="text" name="play-time" placeholder="플레이타임" /> <input
+								type="text" name="end-time" placeholder="영화종료시간" /> <input
+								type="text" name="clean-time" placeholder="청소시간" /></td>
+							<td><select>
+									<option>등록영화1</option>
+									<option>등록영화2</option>
+									<option>등록영화3</option>
+							</select></td>
+							<td><input type="text" name="adv-time" placeholder="광고시작시간" />
+								<input type="text" name="start-time" placeholder="영화시작시간" /> <input
+								type="text" name="play-time" placeholder="플레이타임" /> <input
+								type="text" name="end-time" placeholder="영화종료시간" /> <input
+								type="text" name="clean-time" placeholder="청소시간" /></td>
+							<td><select>
+									<option>등록영화1</option>
+									<option>등록영화2</option>
+									<option>등록영화3</option>
+							</select></td>
+							<td><input type="text" name="adv-time" placeholder="광고시작시간" />
+								<input type="text" name="start-time" placeholder="영화시작시간" /> <input
+								type="text" name="play-time" placeholder="플레이타임" /> <input
+								type="text" name="end-time" placeholder="영화종료시간" /> <input
+								type="text" name="clean-time" placeholder="청소시간" /></td>
+							<td><select>
+									<option>등록영화1</option>
+									<option>등록영화2</option>
+									<option>등록영화3</option>
+							</select></td>
+							<td><input type="text" name="adv-time" placeholder="광고시작시간" />
+								<input type="text" name="start-time" placeholder="영화시작시간" /> <input
+								type="text" name="play-time" placeholder="플레이타임" /> <input
+								type="text" name="end-time" placeholder="영화종료시간" /> <input
+								type="text" name="clean-time" placeholder="청소시간" /></td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div style="text-align: right">
+					<input type="submit" class="btn btn-primary" value="등록" />
+				</div>
+
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>

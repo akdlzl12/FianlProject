@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.employee.mapper.JobHistoryMapper">
+	<select id="readNextId" resultType="int">
+		select seq_job_history.nextval
+		from dual
+	</select>
+	
+	<insert id="insert" parameterType="JobHistory">
+		insert into job_history
+			(id, job_type, employee_id, started_date)
+		values 
+			(#{id}, #{jobType}, #{employee.id}, #{startedDate})
+	</insert>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

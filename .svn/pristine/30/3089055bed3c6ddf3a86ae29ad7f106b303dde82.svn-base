@@ -1,0 +1,35 @@
+package com.es.movie.mapper;
+
+import java.util.Date;
+import java.util.List;
+
+import com.es.movie.vo.Seat;
+import com.es.movie.vo.SeatDisabled;
+import com.es.movie.vo.SeatInfo;
+import com.es.movie.vo.SelectTimetable;
+import com.es.pos.vo.Ticket;
+
+public interface ScreenMapper {
+	//id로 seat정보 조회
+	Seat getSeatBySeatId(int seatId);
+	
+	//screenId로 모든 Seat 조회
+	List<Seat> getSeatsByScreenId(int screenId);
+	
+	//id로 예약석조회
+	List<Ticket> getReservedSeatsByTimetableId(int timetalbleId);
+	
+	//좌석관리 예약석 클릭시 좌석정보
+	SeatInfo getSeatInfoBySeatId(int seatId);
+	
+	//확보좌석 추가
+	void insertSeatDissabled(SeatDisabled seatDisabled);
+	
+	//좌석확보 상태변경
+	void updateSeatStatus(Seat seat);
+//	
+//	//확보좌석 디테일
+//	SeatDisabled getDisabledDetail(int seatId); 
+//	
+	
+}

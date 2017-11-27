@@ -1,0 +1,34 @@
+package com.es.vo;
+
+public class ScreenMovie {
+
+	private Integer id;
+	private Integer dubbled;
+	private Screen screen;
+	private Movie movie;
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public Integer getDubbled() {
+		return dubbled;
+	}
+	public void setDubbled(Integer dubbled) {
+		this.dubbled = dubbled;
+	}
+	public Screen getScreen() {
+		return screen;
+	}
+	public void setScreen(Screen screen) {
+		this.screen = screen;
+	}
+	public Movie getMovie() {
+		return movie;
+	}
+	public void setMovie(Movie movie) {
+		this.movie = movie;
+	}
+}

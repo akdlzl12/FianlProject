@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.financial.mapper.FinTestMapper">
+	<select id="searchCustomers" parameterType="Criteria" resultType="Customer">
+		select 
+			id,
+			username, 
+			name, 
+			birth, 
+			phone, 
+			email,
+			CUSTOMER_RANK_ID
+		from CUSTOMERS
+		<where>
+			<choose>
+				<when test="opt == 'username'">
+					and username like #{keyword}
+				</when>
+				<when test="opt == 'name'">
+					and name like #{keyword}
+				</when>
+				<when test="opt == 'grade'">
+					and CUSTOMER_RANK_ID like #{keyword}
+				</when>
+			</choose>
+		</where>
+	</select>
+	
+	<select id="searchDetailCustomer" resultType="Customer" parameterType="int">
+		select
+			A.id					id,
+			A.username				username,
+			A.name					name,
+			A.phone					phone,
+			A.email					email,
+			A.birth					birth,
+			B.type					"customerRank.type"
+		from
+			customers A, CUSTOMER_RANK B
+		where
+			A.id = #{value}
+			and A.customer_rank_id = B.id		
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

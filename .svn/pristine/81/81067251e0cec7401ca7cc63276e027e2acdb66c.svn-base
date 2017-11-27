@@ -1,0 +1,42 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+	<div class="box">
+		<form action="/employee/management.esc" class="form-horizontal" method="get">
+			<div class="form-group">
+				<div class="col-md-2">
+					<select name="opt" class="form-control">
+						<option value="name">이름</option>
+						<option value="type">사원타입</option>
+						<option value="phone">사원번호</option>
+					</select>
+				</div>
+				<div class="col-md-5">
+					<input type="text" name="keyword" placeholder="검색어" class="form-control"/>
+				</div>
+				<div class="col-md-1">
+					<button class="btn btn-default" type="submit"><i class="fa fa-search fa-fw"></i>검색</button>
+				</div>
+			</div>
+		</form>
+		
+		<table class="table top-margin">
+			<colgroup>
+				<col width="20%" />
+				<col width="40%" />
+				<col width="40%" />
+			</colgroup>
+			<tr>
+				<th>사원번호</th>
+				<th>이름</th>
+				<th>직원타입</th>
+			</tr>
+			<tr class="tr-clickable hover" >
+				<td>01022561234</td>
+				<td>강감찬</td>
+				<td>매점</td>
+			</tr>
+		</table>
+		<div class="text-right">
+			<a id="btn-check" class="btn btn-default"><i class="fa fa-search fa-fw"></i> 상세조회</a>
+		</div>
+	</div>

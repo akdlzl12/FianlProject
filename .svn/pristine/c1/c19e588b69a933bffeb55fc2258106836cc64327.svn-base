@@ -1,0 +1,18 @@
+package com.es.movie.web;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class TimetableController {
+	
+	@RequestMapping("/timetableadd.esc")
+	public String timetableAdd() {
+		return "timetableAdd";
+	}
+	
+	@RequestMapping("/timetableinfo.esc")
+	public String timetableInfo() {
+		return "timetableInfo";
+	}
+}

@@ -1,0 +1,50 @@
+package com.es.movie.vo;
+
+import java.util.Date;
+
+public class MovieTimetable {
+
+	private Integer id;
+	private Date startedAt;
+	private Date endedAt;
+	private Integer onlinePurchase;
+	private Integer offlinePurchase;
+	private ScreenMovie screenMovie;
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public Date getStartedAt() {
+		return startedAt;
+	}
+	public void setStartedAt(Date startedAt) {
+		this.startedAt = startedAt;
+	}
+	public Date getEndedAt() {
+		return endedAt;
+	}
+	public void setEndedAt(Date endedAt) {
+		this.endedAt = endedAt;
+	}
+	public Integer getOnlinePurchase() {
+		return onlinePurchase;
+	}
+	public void setOnlinePurchase(Integer onlinePurchase) {
+		this.onlinePurchase = onlinePurchase;
+	}
+	public Integer getOfflinePurchase() {
+		return offlinePurchase;
+	}
+	public void setOfflinePurchase(Integer offlinePurchase) {
+		this.offlinePurchase = offlinePurchase;
+	}
+	public ScreenMovie getScreenMovie() {
+		return screenMovie;
+	}
+	public void setScreenMovie(ScreenMovie screenMovie) {
+		this.screenMovie = screenMovie;
+	}
+}

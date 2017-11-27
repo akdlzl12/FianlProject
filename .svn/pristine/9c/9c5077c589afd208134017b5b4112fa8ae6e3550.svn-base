@@ -1,0 +1,37 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/common/taglibs.jsp" %>
+<html>
+<head>
+	<title>Home</title>
+	
+	<%@ include file="/WEB-INF/views/common/head.jsp" %>
+</head>
+<body>
+	<c:set var="nav_active" value="employee" />
+	<%@ include file="/WEB-INF/views/common/nav.jsp" %>
+	<div class="row">
+		<div class="col-md-2">
+			<c:set var="side_active" value="search" />
+			<%@ include file="/WEB-INF/views/employee/side_employee.jsp" %>
+		</div>
+		<div class="col-md-10">
+			<form action="/employee/management.esc" class="form-horizontal" method="get">
+				<div class="form-group">
+					<div class="col-md-2">
+						<select name="opt" class="form-control">
+							<option value="name">이름</option>
+							<option value="type">사원타입</option>
+							<option value="phone">사원번호</option>
+						</select>
+					</div>
+					<div class="col-md-5">
+						<input type="text" name="keyword" placeholder="검색어" />
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+</body>
+</html>

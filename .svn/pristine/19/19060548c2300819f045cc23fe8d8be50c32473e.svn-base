@@ -1,0 +1,12 @@
+package com.es.pos.service;
+
+import org.springframework.transaction.annotation.Transactional;
+
+import com.es.employee.vo.Employee;
+
+@Transactional
+public interface LogService {
+
+	void enrollStartingWork(Employee employee, int posId);
+	Employee findEmployeeById(long id, long pwd);
+}

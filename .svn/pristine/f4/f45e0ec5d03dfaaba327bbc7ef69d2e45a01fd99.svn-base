@@ -1,0 +1,8 @@
+package com.es.pos.mapper;
+
+import com.es.employee.vo.Employee;
+
+public interface PosTestMapper {
+
+	Employee getEmployeeByIdentifier(long empId);
+}

@@ -1,0 +1,18 @@
+package com.es.pos.service;
+
+import java.util.List;
+import java.util.Map;
+
+import com.es.management.vo.Customer;
+import com.es.management.vo.Discount;
+import com.es.pos.vo.Ticket;
+import com.es.pos.vo.TicketReceipt;
+
+public interface PaymentService {
+
+	void sellMovieTicket(List<Ticket> tickets, TicketReceipt receipt);
+	
+	List<Discount> findAllDiscounts();
+	Map<String, Object> findCustomerInfo(Map<String, String> map);
+	Customer findCustomerInfo(int customerId);
+}

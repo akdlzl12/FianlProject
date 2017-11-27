@@ -1,0 +1,5 @@
+package com.es.movie.service;
+
+public interface TimeTableInfoService {
+
+}

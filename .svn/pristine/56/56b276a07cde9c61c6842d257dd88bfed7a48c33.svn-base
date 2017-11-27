@@ -1,0 +1,99 @@
+package com.es.pos.service;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.es.financial.vo.CouponCustomer;
+import com.es.management.mapper.CustomerMapper;
+import com.es.management.mapper.DiscountMapper;
+import com.es.management.vo.Customer;
+import com.es.management.vo.Discount;
+import com.es.pos.mapper.PosTestMapper;
+import com.es.pos.mapper.TicketMapper;
+import com.es.pos.vo.Ticket;
+import com.es.pos.vo.TicketReceipt;
+
+@Service
+public class PaymentServiceImpl implements PaymentService {
+
+	@Autowired
+	private CustomerMapper customerMapper;
+	@Autowired
+	private TicketMapper ticketMapper;
+	@Autowired
+	private DiscountMapper discountMapper;
+	@Autowired
+	private PosTestMapper posTestMapper;
+	
+	@Override
+	public void sellMovieTicket(List<Ticket> tickets, TicketReceipt receipt) {
+		Date now = new Date();
+		String dateNo = new SimpleDateFormat("yyyy-MMdd").format(now);
+		
+		String time1 = String.valueOf(now.getTime()).substring(5, 9);
+		String time2 = String.valueOf(now.getTime()).substring(9, 13);
+		
+		String rid = dateNo + "-" + time1 + "-" + time2;
+		
+		int receiptSeq = ticketMapper.getReceiptSeq();
+		receipt.setId(receiptSeq);
+		receipt.setRid(rid);
+		receipt.setMiliege(receipt.getCustomer().getMiliege());
+		
+		ticketMapper.addTicketReceipt(receipt);
+		
+		for(Ticket forTicket : tickets) {
+			forTicket.setTicketReceipt(receipt);
+			ticketMapper.addTicket(forTicket);
+		}
+	}
+	
+	@Override
+	public List<Discount> findAllDiscounts() {
+		return discountMapper.getDiscount(0);
+	}
+
+	@Override
+	public Map<String, Object> findCustomerInfo(Map<String, String> map) {
+		Customer customer = customerMapper.getCustomerByNameNPhone(map);
+		List<CouponCustomer> couponList =  posTestMapper.getCouponesByCustomerId(customer.getId());
+		
+		Map<String, Object> customerInfo = new HashMap<String, Object>();
+		
+		customerInfo.put("customer", customer);
+		customerInfo.put("couponList", couponList);
+		
+		return customerInfo;
+	}
+	
+	@Override
+	public Customer findCustomerInfo(int customerId) {
+		return customerMapper.getDetailCustomer(customerId);
+	}
+	
+	@Override
+	public CouponCustomer findCouponOfCustomer(int customerId) {
+		return posTestMapper.getCouponCustomerById(customerId);
+	}
+
+	@Override
+	public void changeUsedCoupone(CouponCustomer couponCustomer) {
+		couponCustomer.setUsed(1);
+		posTestMapper.updateCouponCustomerInfo(couponCustomer);
+	}
+
+	@Override
+	public void changeCustomerMiliege(Customer customer) {
+		Customer checkedCustomer = customerMapper.getDetailCustomer(customer.getId());
+		int miliege = customer.getMiliege();
+		checkedCustomer.setMiliege(checkedCustomer.getMiliege() - miliege);
+		
+		posTestMapper.updateCustomerInfo(checkedCustomer);
+	}
+}

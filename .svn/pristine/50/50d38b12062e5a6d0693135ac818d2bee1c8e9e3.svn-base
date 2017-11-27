@@ -1,0 +1,59 @@
+package com.es.employee.web;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.es.employee.service.EmployeeService;
+import com.es.employee.vo.Employee;
+
+@Controller
+public class EmployeeController {
+	
+	@Autowired
+	private EmployeeService empService;
+	
+	@PostMapping("/register.esc")
+	public String register(Employee employee) {
+		employee = this.empService.register(employee);
+		System.out.println(employee);
+		
+		return "redirect:/employee/index.esc";
+	}
+	
+	
+	
+	
+	
+	@GetMapping("/index.esc")
+	public String index() {
+		return "index";
+	}
+	
+	@GetMapping("/search.esc")
+	public String search() {
+		return "search";
+	}
+	
+	@GetMapping("/detail.esc")
+	public String detail(int id) {
+		return "detail";
+	}
+	
+	@GetMapping("/management.esc")
+	public String management() {
+		return "management";
+	}
+	
+	@GetMapping("/punishment.esc")
+	public String punishment() {
+		return "punishment";
+	}
+	@GetMapping("/salary_manage.esc")
+	public String salaryManage() {
+		return "salary_manage";
+	}
+	
+	
+}

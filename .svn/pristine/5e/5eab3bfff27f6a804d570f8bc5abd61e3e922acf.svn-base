@@ -1,0 +1,24 @@
+package com.es.financial.web;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.es.financial.service.CouponService;
+import com.es.financial.vo.Coupon;
+
+@Controller
+public class CouponController {
+	
+	private CouponService couponService;
+	
+	@RequestMapping("/add.do")
+	public String submit(Coupon coupon) {
+		couponService.addCoupon(coupon);
+		return "redirect:/managementCoupon";
+	}
+	
+	@RequestMapping("/managementCoupon.esc")
+	public String management() {
+		return "managementCoupon";
+	}
+}

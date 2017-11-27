@@ -1,0 +1,8 @@
+package com.es.pos.service;
+
+import com.es.employee.vo.Employee;
+
+public interface LogService {
+
+	Employee findEmployeeById(long id, long pwd);
+}

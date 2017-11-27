@@ -1,0 +1,9 @@
+package com.es.management.mapper;
+
+import java.util.List;
+
+import com.es.management.vo.Discount;
+
+public interface DiscountMapper {
+	List<Discount> getDiscount(int discountId);
+}

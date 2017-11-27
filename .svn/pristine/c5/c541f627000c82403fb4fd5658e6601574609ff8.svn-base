@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<typeAliases>
+		<!-- Common -->
+		<typeAlias alias="Pagination" type="com.es.common.vo.Pagination"/>
+		<typeAlias alias="Criteria" type="com.es.common.vo.Criteria"/>
+		
+		<!-- Employee -->
+		<typeAlias alias="Employee" type="com.es.employee.vo.Employee"/>
+		<typeAlias alias="EmployeeManagement" type="com.es.employee.vo.EmployeeManagement"/>
+		<typeAlias alias="EmployeeSalary" type="com.es.employee.vo.EmployeeSalary"/>
+		<typeAlias alias="EmployeeTimetable" type="com.es.employee.vo.EmployeeTimetable"/>
+		<typeAlias alias="PayHistory" type="com.es.employee.vo.PayHistory"/>
+		
+		<!-- Financial -->
+		<typeAlias alias="Coupon" type="com.es.financial.vo.Coupon"/>
+		<typeAlias alias="CouponCustomer" type="com.es.financial.vo.CouponCustomer"/>
+		<typeAlias alias="DailyReport" type="com.es.financial.vo.DailyReport"/>
+		<typeAlias alias="Gift" type="com.es.financial.vo.Gift"/>
+		<typeAlias alias="GiftCustomer" type="com.es.financial.vo.GiftCustomer"/>
+		
+		<!-- Management -->
+		<typeAlias alias="Customer" type="com.es.management.vo.Customer"/>
+		<typeAlias alias="CustomerRank" type="com.es.management.vo.CustomerRank"/>
+		<typeAlias alias="CustomerType" type="com.es.management.vo.CustomerType"/>
+		<typeAlias alias="Discount" type="com.es.management.vo.Discount"/>
+		<typeAlias alias="LostCustomerItem" type="com.es.management.vo.LostCustomerItem"/>
+		
+		<!-- Movie -->
+		<typeAlias alias="Movie" type="com.es.movie.vo.Movie"/>
+		<typeAlias alias="MovieImage" type="com.es.movie.vo.MovieImage"/>
+		<typeAlias alias="MovieTimetable" type="com.es.movie.vo.MovieTimetable"/>
+		<typeAlias alias="Screen" type="com.es.movie.vo.Screen"/>
+		<typeAlias alias="ScreenMovie" type="com.es.movie.vo.ScreenMovie"/>
+		<typeAlias alias="Seat" type="com.es.movie.vo.Seat"/>
+		<typeAlias alias="SeatDisabled" type="com.es.movie.vo.SeatDisabled"/>
+		
+		<!-- POS -->
+		<typeAlias alias="Pos" type="com.es.pos.vo.Pos"/>
+		<typeAlias alias="PosLoginHistory" type="com.es.pos.vo.PosLoginHistory"/>
+		<typeAlias alias="Ticket" type="com.es.pos.vo.Ticket"/>
+		<typeAlias alias="TicketReceipt" type="com.es.pos.vo.TicketReceipt"/>
+	</typeAliases>
+
+	<mappers>
+		<!-- Employee -->
+		<mapper resource="META-INF/mybatis/mappers/employee/employee.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/employee/pay_history.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/employee/test.xml"/>
+		
+		<!-- Financial -->
+		<mapper resource="META-INF/mybatis/mappers/financial/coupon.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/financial/gift.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/financial/report.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/financial/test.xml"/>
+		
+		<!-- Management -->
+		<mapper resource="META-INF/mybatis/mappers/management/customer.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/management/discount.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/management/lost-item.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/management/test.xml"/>
+		
+		<!-- Movie -->
+		<mapper resource="META-INF/mybatis/mappers/movie/movie.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/movie/screen.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/movie/test.xml"/>
+		
+		<!-- Pos -->
+		<mapper resource="META-INF/mybatis/mappers/pos/pos.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/pos/ticket.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/pos/test.xml"/>
+	</mappers>
+</configuration>

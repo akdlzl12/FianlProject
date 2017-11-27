@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.management.mapper.CustomerMapper">
+
+
+	<select id="getAllCustomers" resultType="Customer">
+		select
+			id						id,
+			username				username,
+			password				password,
+			name					name,
+			phone					phone,
+			email					email,
+			gender					gender,
+			miliege					miliege,
+			image_uri				imageUri,
+			deleted					deleted,
+			third_party				thirdParty,
+			created_at				createdAt,
+			updated_at				updatedAt,
+			customer_rank_id		"customerRank.type",
+			customer_type_id		"customerTypes.type",
+			birth					birth
+		from
+			customers	
+	</select>
+	
+	<select id="getDetailCustomer" resultType="Customer" parameterType="int">
+		select
+			A.id					id,
+			A.username				username,
+			A.password				password,
+			A.name					name,
+			A.phone					phone,
+			A.email					email,
+			A.gender				gender,
+			A.miliege				miliege,
+			A.image_uri				imageUri,
+			A.deleted				deleted,
+			A.third_party			thirdParty,
+			A.created_at			createdAt,
+			A.updated_at			updatedAt,
+			A.customer_rank_id		"customerRank.id",
+			A.customer_type_id		"customerTypes.type",
+			A.birth					birth,
+			B.type					"customerRank.type"
+		from
+			customers A, CUSTOMER_RANK B
+		where
+			A.customer_rank_id = B.id
+		and
+			A.id = #{value}		
+	</select>
+	
+	<select id="searchByCustomers" parameterType="Criteria" resultType="Customer">
+		select
+			id						id,
+			username				username,
+			password				password,
+			name					name,
+			phone					phone,
+			email					email,
+			gender					gender,
+			miliege					miliege,
+			image_uri				imageUri,
+			deleted					deleted,
+			third_party				thirdParty,
+			created_at				createdAt,
+			updated_at				updatedAt,
+			customer_rank_id		"customerRank.type",
+			customer_type_id		"customerTypes.type",
+			birth					birth
+		from
+			customers
+		<where>
+			<if test="keyword != null or keyword != ''">
+				<choose>
+					<when test="opt == 'id'">
+						and id like '%' || #{keyword} || '%'
+					</when>
+					<when test="opt == 'name'">
+						and name like '%' || #{keyword} || '%'
+					</when>
+					<when test="opt == 'birth'">
+						and birth like '%' || #{keyword} || '%'
+					</when>
+					<when test="opt == 'phone'">
+						and phone like '%' || #{keyword} || '%'
+					</when>
+					<when test="opt == 'email'">
+						and email like '%' || #{keyword} || '%'
+					</when>
+				</choose>
+			</if>
+		</where>	
+	</select>
+	
+	<select id="searchByOther" parameterType="Criteria" resultType="Customer">
+	select
+		B.id,
+		B.USERNAME username,
+		B.NAME name,
+		B.BIRTH birth,
+		B.PHONE phone,
+		B.EMAIL email,
+		B.CUSTOMER_RANK_ID "customerRank.type"
+
+		from GIFT_CUSTOMERS A, CUSTOMERS B
+		<where>
+			 A.CUSTOMER_ID = B.ID
+			 <choose>
+			 	<when test="opt == 'username'">
+			 	and username like #{keyword}
+			 	</when>
+			 	<when test="opt == 'name'">
+			 	and name like #{keyword}
+			 	</when>
+			 </choose>
+		</where>
+	UNION
+
+		select
+		B.id,
+		B.USERNAME username,
+		B.NAME name,
+		B.BIRTH birth,
+		B.PHONE phone,
+		B.EMAIL email,
+		B.CUSTOMER_RANK_ID "customerRank.type"
+	
+		from COUPON_Customers A, CUSTOMERS B
+		<where>
+			 A.CUSTOMER_ID = B.ID
+			 <choose>
+			 	<when test="opt == 'username'">
+			 	and username like #{keyword}
+			 	</when>
+			 	<when test="opt == 'name'">
+			 	and name like #{keyword}
+			 	</when>
+			 </choose>
+		</where>
+</select>
+	<select id="searchByCoupon" parameterType="Criteria" resultType="Customer">
+		select 
+			A.id,
+			A.USERNAME username,
+			A.NAME name,
+			A.BIRTH birth,
+			A.PHONE phone,
+			A.EMAIL email,
+			A.CUSTOMER_RANK_ID "customerRank.type",		
+			B.coupon_id			"coupon.id"
+			
+		from CUSTOMERS A, coupon_customers B
+		<where>
+		A.id = B.CUSTOMER_ID
+		and B.coupon_id like #{keyword}
+		</where>
+	</select>
+	<select id="searchByGift" parameterType="Criteria" resultType="Customer">
+		select 
+			A.id,
+			A.USERNAME username,
+			A.NAME name,
+			A.BIRTH birth,
+			A.PHONE phone,
+			A.EMAIL email,
+			A.CUSTOMER_RANK_ID "customerRank.type",	
+			B.GIFT_ID			"gift.id"
+			
+		from CUSTOMERS A, GIFT_CUSTOMERS B
+		<where>
+		A.id = B.CUSTOMER_ID
+		and B.GIFT_ID like #{keyword}
+		</where>
+	</select>
+	
+	<select id="getDetailCoupon" parameterType="int" resultType="CouponCustomer">
+	select
+		A.ID				id,
+		A.USED				used,
+		A.RECEIVED_AT		receivedAt,
+		A.EXPIRED_AT		expiredAt,
+		B.name				"coupon.name"
+		
+		from COUPON_CUSTOMERS A, COUPONES B
+		where A.COUPON_ID = B.ID
+		and A.CUSTOMER_ID = #{value}
+	</select>
+	
+	<select id="getDetailGift" parameterType="int" resultType="GiftCustomer">
+	select
+		A.ID				id,
+		A.RECEIVED_AT		receivedAt,
+		B.name				"gift.name",
+		A.RECEIVED			received
+		
+		from GIFT_CUSTOMERS A, GIFTS B
+		where A.GIFT_ID = B.ID
+		and A.CUSTOMER_ID = #{value}
+	</select>
+	
+	<select id="getKeyInAllSelect" resultType="CustomerType">
+		select
+			id			id,
+			type		type,
+			price		price,
+			detail		detail
+		from
+			CUSTOMER_TYPES
+		order by id
+					
+	</select>
+	
+	<insert id="setByKeyIn" parameterType="CustomerType">
+		insert into CUSTOMER_TYPES
+   			(id, type, price, detail)
+		values
+    		(SEQ_CUSTOMER_TYPES.NEXTVAL, #{type}, #{price}, #{detail})
+	</insert>
+	
+	<!-- map의 값(key)을 collection에 넣는다 collection에는 배열또는리스트만 넣을 수 있다. -->
+	<delete id="deleteByKeyIn" parameterType="map">
+		DELETE from
+    		CUSTOMER_TYPES
+		where
+   			id in (
+   				<foreach collection="keys" index="index" item="a" separator=",">
+   					${a}
+   				</foreach>
+   			)
+	</delete>
+	
+	
+	<!-- value가 0 or -값이면 전체검색-->
+	<select id="getCustomerType" parameterType="int" resultType="CustomerType">
+		select
+			id			id
+			,type		type
+			,price		price
+		from customer_types
+		<where>
+			<if test="value > 0">
+				and id = #{value}
+			</if>
+		</where>
+	</select>
+
+	<!-- 이름이랑 핸드폰번호 조회 -->
+	<select id="getCustomerByNameNPhone" parameterType="hashmap" resultType="Customer">
+		select
+			A.id						id
+			,A.username 				username
+			,A.name						name
+			,A.phone					phone
+			,A.miliege					miliege
+			,A.customer_type_id			"customerType.id"
+			,A.birth					birth
+			,B.id						"customerRank.id"
+			,B.type						"customerRank.type"
+		from customers A, customer_rank B
+		where B.id = A.customer_rank_id
+		and A.deleted = 0
+		and A.name = #{name}
+		and A.phone = #{phone}
+	</select>
+	
+	<select id="getCustomerTypeByType" parameterType="int" resultType="CustomerType">
+		select
+			id			id
+			,type		type
+			,price		price
+		from 
+			customer_types
+		where
+			id = #{value}
+		
+	</select>
+	
+	
+	
+</mapper>

@@ -1,0 +1,175 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/common/taglibs.jsp" %>
+<html>
+<head>
+	<title>Home</title>
+	
+	<%@ include file="/WEB-INF/views/common/head.jsp" %>
+	
+	<script src="/resources/js/employee.js"></script>
+	<style>
+		.modal-lg {
+	    max-width: 60% !important;
+		width: 60% !important
+		}
+		.modal-content {
+			padding: 32px;
+		}
+	</style>
+</head>
+<body>
+	<%@ include file="/WEB-INF/views/employee/common_view.jsp" %>
+	<c:set var="nav_active" value="employee" />
+	<%@ include file="/WEB-INF/views/common/nav.jsp" %>
+	<div class="row">
+		<div class="col-md-2">
+			<c:set var="side_active" value="search" />
+			<%@ include file="/WEB-INF/views/employee/side_employee.jsp" %>
+		</div>
+		<div class="col-md-10">
+			<div class="container top-margin">
+				<h2 class="page-header">직원조회</h2>
+				<c:set var="pageforward" value="/employee/search.esc" />
+				<%@ include file="/WEB-INF/views/employee/search_employee.jsp" %>
+			</div>
+		</div>
+	</div>
+	<div id="modal-employee" class="modal fade" tabindex="-1" role="dialog" style="padding: 12px;">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">직원 상세정보</h4>
+				</div>
+		      	<div class="modal-body" style="padding: 12px !important; margin: 12px !important;">
+		        	<div class="row">
+						<table class="table">
+							<colgroup>
+								<col width="10%" />
+								<col width="23.3%" />
+								<col width="10%" />
+								<col width="23.3%" />
+								<col width="10%" />
+								<col width="23.3%" />
+							</colgroup>
+							<tr>
+								<th>사원번호</th>
+								<td id="td-id"></td>
+								<th>이름</th>
+								<td id="td-name"></td>
+								<th>사원타입</th>
+								<td id="td-job-type"></td>
+							</tr>
+							<tr>
+								<th>생년월일</th>
+								<td id="td-birth"></td>
+								<th>연락처</th>
+								<td colspan="3" id="td-phone"></td>
+							</tr>
+							<tr>
+								<th>입사일</th>
+								<td id="td-hired-at"></td>
+								<th>퇴사일</th>
+								<td colspan="3" id="td-dismissed-at"></td>
+							</tr>
+						</table>
+						<a class="btn btn-default"><i class="fa fa-pencil fa-fw"></i> 수정</a>
+						
+						<div class="row top-margin">
+							<div class="col-md-6">
+								<h4 class="page-headr">과거이력</h4>
+								<table class="table">
+									<colgroup>
+										<col width="33.3%" />
+										<col width="33.3%" />
+										<col width="33.3%" />
+									</colgroup>
+									<tr id="tr-job-history">
+										<th>직원타입</th>
+										<th>시작일</th>
+										<th>종료일</th>
+									</tr>
+									<tr>
+									</tr>
+								</table>
+							</div>
+							<div class="col-md-6">
+								<h4 class="page-headr">징계이력</h4>
+								<table class="table">
+									<colgroup>
+										<col width="30%" />
+										<col width="70%" />
+									</colgroup>
+									<tr id="tr-thief-history">
+										<th>징계</th>
+										<th>날짜</th>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+		      	</div>
+		      	<div class="modal-footer">
+		        	<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+		      	</div>
+	    	</div>
+	  	</div>
+	</div>
+</body>
+<script>
+function modalSearch(empId) {
+	console.log('empId ? ', empId);
+	$.ajax({
+		type: 'get',
+		url: '/employee/detail.esc',
+		dataType: 'json',
+		async: true,
+		data: {id: empId, when: new Date()},
+		success: function(emp) {
+			console.log(emp);
+			$('#modal-employee').modal();
+			$('#td-id').text(emp.id);
+			$('#td-name').text(emp.name);
+			$('#td-job-type').text(emp.jobType == 'T' ? '티켓팅' : '안내');
+			$('#td-birth').text(moment(emp.birth, 'x').format('YYYY-MM-DD'));
+			$('#td-phone').text(moment(emp.birth, 'x').format('YYYY-MM-DD'));
+			$('#td-hired_at').text(moment(emp.hiredAt, 'x').format('YYYY-MM-DD'));
+			$('#td-dismissed_at').text(moment(emp.dismissAt, 'x').format('YYYY-MM-DD'));
+			
+			var html = '',
+			jobHistory = emp.jobHistory,
+			thiefRecord = emp.thiefRecord;
+			if(jobHistory) {
+				jobHistory.forEach(function(index, history) {
+					html += "<tr>";
+					html += "<td>"+(history.jobType == 'I' ? '안내' : '티켓팅')+"</td>";
+					html += "<td>"+moment(history.startedDate, 'x').format('YYYY-MM-DD')+"</td>";
+					html += "<td>"+moment(history.endedDate, 'x').format('YYYY-MM-DD')+"</td>";
+					html += "</tr>";
+				});
+				$('#tr-job-history').after(html);
+			}
+			
+			
+			
+			html = '';
+			
+			if(thiefRecord) {
+				thiefRecord.forEach(function(index, record) {
+					html += "<tr>";
+					html += "<td>횡령</td>";
+					html += "<td>"+moment(record.timetable.startedAt, 'x').format('YYYY-MM-DD')+"</td>";
+					html += "</tr>";
+				});
+				
+			} else {
+				html = "<tr><td colspan='2'>징계이력이 없습니다</td></tr>";
+			}
+			$('#tr-theif-history').after(html);
+			
+		}
+	});
+}
+</script>
+</html>

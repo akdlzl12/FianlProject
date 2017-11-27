@@ -1,0 +1,41 @@
+package com.es.pos.service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.es.financial.vo.CouponCustomer;
+import com.es.management.mapper.CustomerMapper;
+import com.es.management.vo.Customer;
+import com.es.management.vo.Discount;
+import com.es.pos.mapper.PosTestMapper;
+
+@Service
+public class PaymentServiceImpl implements PaymentService {
+
+	@Autowired
+	private CustomerMapper customerMapper;
+	@Autowired
+	private PosTestMapper posTestMapper;
+	
+	@Override
+	public List<Discount> findAllDiscounts() {
+		return posTestMapper.getDiscount(0);
+	}
+
+	@Override
+	public Map<String, Object> findCustomerInfo(Map<String, String> map) {
+		Customer customer = posTestMapper.getCustomerByNameNPhone(map);
+		List<CouponCustomer> couponList =  posTestMapper.getCouponesByCustomerId(customer.getId());
+		
+		Map<String, Object> customerInfo = new HashMap<String, Object>();
+		
+		customerInfo.put("customer", customer);
+		customerInfo.put("couponList", couponList);
+		
+		return customerInfo;
+	}
+}

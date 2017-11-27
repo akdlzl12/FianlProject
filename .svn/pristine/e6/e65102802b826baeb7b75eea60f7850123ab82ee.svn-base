@@ -1,0 +1,199 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/common/taglibs.jsp" %>
+<html>
+<head>
+	<title>Home</title>
+	<%@ include file="/WEB-INF/views/common/head.jsp" %>
+</head>
+<body>
+	<c:set var="nav_active" value="management" />
+	
+	<%@ include file="/WEB-INF/views/common/nav.jsp" %>
+	<div class="row">
+		<div class="col-md-2">
+			<c:set var="side_active" value="register" />
+			<%@ include file="/WEB-INF/views/management/sidebar/sideBar.jsp" %>
+		</div>
+		<div class="col-md-10">
+			<div class="container" style="margin-top: 50px;">
+		       <div>
+		           <form action="">
+		              <div class="form-group form-inline">
+		                   <select name="type" id="type" class="form-control">
+		                       <option value="">아이디</option>
+		                       <option value="">이름</option>
+		                       <option value="">생일</option>
+		                       <option value="">연락처</option>
+		                       <option value="">메일주소</option>
+		                   </select>
+		                   
+		                   <input type="text" name="search" placeholder="검색어" class="form-control">
+		                   <button class="btn btn-default" type="submit">검색</button>
+		               </div>
+		           </form>
+		       </div>
+       <div style="overflow: auto;">
+            <form action="">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>아이디</th>
+                            <th>이름</th>
+                            <th>생일</th>
+                            <th>연락처</th>
+                            <th>메일주소</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="detailhighlight">
+                            <td>akdlzl12</td>
+                            <td>홍길동</td>
+                            <td>1990.10.05</td>
+                            <td>010-5423-8753</td>
+                            <td>hong@naver.com</td>
+                        </tr>
+                        <tr class="detailhighlight">
+                            <td>akdlzl12</td>
+                            <td>홍길동</td>
+                            <td>1990.10.05</td>
+                            <td>010-5423-8753</td>
+                            <td>hong@naver.com</td>
+                        </tr>
+                        <tr class="detailhighlight">
+                            <td>akdlzl12</td>
+                            <td>홍길동</td>
+                            <td>1990.10.05</td>
+                            <td>010-5423-8753</td>
+                            <td>hong@naver.com</td>
+                        </tr>
+                        <tr class="detailhighlight">
+                            <td>akdlzl12</td>
+                            <td>홍길동</td>
+                            <td>1990.10.05</td>
+                            <td>010-5423-8753</td>
+                            <td>hong@naver.com</td>
+                        </tr>
+                        <tr class="detailhighlight">
+                            <td>akdlzl12</td>
+                            <td>홍길동</td>
+                            <td>1990.10.05</td>
+                            <td>010-5423-8753</td>
+                            <td>hong@naver.com</td>
+                        </tr>
+                        <tr class="detailhighlight">
+                            <td>akdlzl12</td>
+                            <td>홍길동</td>
+                            <td>1990.10.05</td>
+                            <td>010-5423-8753</td>
+                            <td>hong@naver.com</td>
+                        </tr>
+                        <tr class="detailhighlight">
+                            <td>akdlzl12</td>
+                            <td>홍길동</td>
+                            <td>1990.10.05</td>
+                            <td>010-5423-8753</td>
+                            <td>hong@naver.com</td>
+                        </tr>
+                        <tr class="detailhighlight">
+                            <td>akdlzl12</td>
+                            <td>홍길동</td>
+                            <td>1990.10.05</td>
+                            <td>010-5423-8753</td>
+                            <td>hong@naver.com</td>
+                        </tr>
+                        <tr class="detailhighlight">
+                            <td>akdlzl12</td>
+                            <td>홍길동</td>
+                            <td>1990.10.05</td>
+                            <td>010-5423-8753</td>
+                            <td>hong@naver.com</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+                <div class="text-right">
+                    <button type="button" class="btn btn-default" id="btn-open-modal">상세조회</button>
+                </div>
+            </form>
+        </div>
+        
+        
+        <div id="myModal" class="modal fade" role="dialog">
+          <div class="modal-dialog modal-lg"> 
+
+
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">상세 정보</h4>
+              </div>
+              <div class="modal-body">
+                <div>
+                    <form action="">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>아이디</th><td>akdlzl12</td>
+                                    <th>이름</th><td>홍길동</td>
+                                    <th>회원등급</th><td>VIP</td>
+                                </tr>
+                                <tr>
+                                    <th>생일</th><td>1991.04.12</td>
+                                    <th>연락처</th><td>010-5789-5241</td>
+                                    <th>메일주소</th><td>hong@naver.com</td>
+                                </tr>
+                                <tr>
+                                    <th>누적포인트</th><td>100</td>
+                                    <th>사용가능포인트</th><td>100</td>
+                                    <th>가용 예정 포인트</th><td>2,000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>날짜</th>
+                                <th>결제금액</th>
+                                <th>적립금</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2017-10-05</td>
+                                <td>20,000</td>
+                                <td>2,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>  
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+              </div>
+            </div>
+        </div>
+        </div>
+    </div>
+		</div>
+	</div>
+</body>
+<script>
+	   $(function() {
+	       $("#btn-open-modal").click(function() {
+	           $("#myModal").modal("show");
+	           return false;
+	       })
+	       
+	       $(".detailhighlight").click(function() {
+                $(".detailhighlight").css("background-color", "white");
+                $(this).css("background-color", "#FA58F4");
+                
+         })
+	   })
+</script>
+</html>

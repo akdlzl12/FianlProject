@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.management.mapper.LostAndFoundMapper">
+	<select id="getLostItemSelect" parameterType="Criteria" resultType="LostCustomerItem">
+		select
+			id					id,
+			item_name			itemName,
+			receiver_phone		receiverPhone,
+			receiver_name		receiverName,
+			RETURNED_AT			returnedAt,
+			found_date			foundDate,
+			finder				finder,
+			status				status,
+			find_location		findLocation,
+			giver				giver
+		from
+			lost_customer_items
+		<where>
+			<if test="keyword != null or keyword != ''">
+			<choose>
+				<when test="opt == 'id'">
+					and id like '%' || #{keyword} || '%'
+				</when>
+				<when test="opt == 'itemName'">
+					and item_name like '%' || #{keyword} || '%'
+				</when>
+				<when test="opt == 'foundDate'">
+					and found_date like '%' || #{keyword} || '%'
+				</when>
+				<when test="opt == 'finder'">
+					and finder like '%' || #{keyword} || '%'
+				</when>
+				<when test="opt == 'findLocation'">
+					and find_location like '%' || #{keyword} || '%'
+				</when>
+				<when test="opt == 'status'">
+					and status like '%' || #{keyword} || '%'
+				</when>
+			</choose>
+			</if>
+		</where>		
+	</select>
+	
+	<select id="getDetailLostItemSelect" parameterType="int" resultType="LostCustomerItem">
+		select
+			id					id,
+			item_name			itemName,
+			receiver_phone		receiverPhone,
+			receiver_name		receiverName,
+			RETURNED_AT			returnedAt,
+			found_date			foundDate,
+			finder				finder,
+			status				status,
+			find_location		findLocation,
+			giver				giver
+		from
+			lost_customer_items
+		where
+			id = #{value}	
+	</select>
+	
+	<update id="updateGiveItem" parameterType="UpdateGiveItemForm">
+		update 
+			lost_customer_items
+		set
+			receiver_name = #{receverName},
+			receiver_phone = #{receverPhone},
+			giver = #{giver},
+			status = #{status}
+		where
+			id = #{id}
+	</update>
+	
+	<insert id="insertItem" parameterType="InsertItemForm">
+		insert into lost_customer_items
+			(id, item_name, receiver_phone, receiver_name, RETURNED_AT, found_date, finder, status, find_location, giver)
+		values
+			(seq_lost_customer_items.nextval, #{itemName}, null, null, null, #{foundDate}, #{finder}, 'K', #{findLocation}, null)	
+			
+	</insert>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

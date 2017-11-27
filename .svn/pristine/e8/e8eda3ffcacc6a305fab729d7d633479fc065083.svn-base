@@ -1,0 +1,70 @@
+package com.es.movie.rest;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.es.movie.service.MovieSeatService;
+import com.es.movie.vo.Screen;
+import com.es.movie.vo.Seat;
+import com.es.movie.vo.SelectTimetable;
+import com.es.pos.service.MovieSelectService;
+import com.es.pos.vo.Ticket;
+
+@RestController
+public class MovieSeatAjaxController {
+	
+	@Autowired
+	private MovieSeatService movieSeatService;
+	
+	@Autowired
+	private MovieSelectService movieSelectService;
+	
+	//날짜로 상영관 조회
+	@RequestMapping("/getInfoBydates.esc")
+	@ResponseBody
+	public List<SelectTimetable> getAllScreenNameByDate(Date playDate) {
+		List<SelectTimetable> selectTimetables =new ArrayList<SelectTimetable>();
+		selectTimetables = movieSeatService.getAllScreenNameByDate(playDate);
+		
+		return selectTimetables;
+	}
+	
+	
+	//상영관 선택으로 영화정보 조회 
+	@RequestMapping("/getInfoByScreens.esc")
+	@ResponseBody
+	public List<SelectTimetable> getAllMoviesByDate(Date playDate) {
+		List<SelectTimetable> selectTimetables = new ArrayList<SelectTimetable>();
+		selectTimetables = movieSeatService.getAllMoviesByDate(playDate);
+		
+		return selectTimetables;
+		}
+		
+	// 예약석뽑기
+	@RequestMapping("/getReservedSeat.esc")
+	@ResponseBody
+	public List<Seat> seatInfo(String selectScreen, int timetableId) {
+		Screen screen = movieSeatService.getScreenIdByName(selectScreen);
+		int screenId = screen.getId();
+		
+		List<Seat> allSeat = movieSelectService.getSeatInfoInScreen(screenId);
+		List<Ticket> allTicket = movieSelectService.getReservedSeatInfoInTimetable(timetableId);
+		
+		for(Ticket forTicket : allTicket) {
+			for(Seat forSeat : allSeat) {
+				if(forTicket.getSeat().getId().intValue() == forSeat.getId().intValue()) {
+					forSeat.setStatus("R");
+				}
+			}
+		}
+		
+		return allSeat;
+	}
+	
+}

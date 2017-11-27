@@ -1,0 +1,50 @@
+package com.es.vo;
+
+import java.util.Date;
+
+public class DailyReport {
+
+	private Integer id;
+	private String 	report;
+	private Date workingDate;
+	private Integer mismatchMoney;
+	private Employee employee;
+	private Pos pos;
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getReport() {
+		return report;
+	}
+	public void setReport(String report) {
+		this.report = report;
+	}
+	public Date getWorkingDate() {
+		return workingDate;
+	}
+	public void setWorkingDate(Date workingDate) {
+		this.workingDate = workingDate;
+	}
+	public Integer getMismatchMoney() {
+		return mismatchMoney;
+	}
+	public void setMismatchMoney(Integer mismatchMoney) {
+		this.mismatchMoney = mismatchMoney;
+	}
+	public Employee getEmployee() {
+		return employee;
+	}
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+	public Pos getPos() {
+		return pos;
+	}
+	public void setPos(Pos pos) {
+		this.pos = pos;
+	}
+}

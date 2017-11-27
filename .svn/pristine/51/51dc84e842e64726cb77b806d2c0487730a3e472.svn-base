@@ -1,0 +1,141 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/common/taglibs.jsp" %>
+<html>
+<head>
+	<title>Home</title>
+	
+	<%@ include file="/WEB-INF/views/common/head.jsp" %>	
+</head>
+<body>
+	<c:set var="nav_active" value="movie" />
+	
+	<%@ include file="/WEB-INF/views/common/nav.jsp" %>
+	<div class="row">
+		<div class="col-md-2">
+			<c:set var="side_active" value="m3two" />
+			<%@ include file="/WEB-INF/views/movie/common/side_movie.jsp" %>
+		</div>
+		<div class="col-md-10">
+			<div class="container top-margin">
+			 <h2 class="page-header">영화 조회</h2>
+				<div>
+					<form action="">
+						<div class="form-group form-inline">
+							<select name="" id="" class="form-control">
+								<option value="">영화명</option>
+								<option value="">배급일</option>
+								<option value="">개봉일</option>
+							</select> 
+							<input type="text" name="search" placeholder="검색어" class="form-control">
+							<button class="btn btn-primary" type="submit"><i class="fa fa-search fa-fw"></i>검색</button>
+						</div>
+					</form>
+				</div>
+				<div
+					style="overflow: auto; border: 0.5px solid #D8D8D8; padding: 20px;">
+					<form action="">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>영화명</th>
+									<th>배급일</th>
+									<th>개봉일</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="highlight">
+									<td>토르:라그나로크</td>
+									<td>2017-10-30</td>
+									<td>2017-10-24</td>
+								</tr>
+								<tr class="highlight">
+									<td>아이언맨3</td>
+									<td>2017-10-30</td>
+									<td>2017-10-24</td>
+								</tr>
+								<tr class="highlight">
+									<td>스파이더맨:리리메이크</td>
+									<td>2017-10-30</td>
+									<td>2017-10-24</td>
+								</tr>
+
+
+							</tbody>
+						</table>
+						<div class="text-right">
+							<button type="button" class="btn btn-danger"
+								id="btn-close-movie"><i class="fa fa-trash fa-fw"></i>상영종료</button>
+							<button type="button" class="btn btn-primary" id="btn-open-modal"><i class="fa fa-list fa-fw"></i>상세조회</button>
+						</div>
+					</form>
+				</div>
+
+				<hr />
+
+				<div id="myModal" class="modal fade" role="dialog">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">영 화 상 세 정 보</h4>
+							</div>
+							<div class="modal-body">
+								<div>
+									<form action="">
+										<table class="table">
+											<tbody>
+												<tr>
+													<th>영화명</th>
+													<td>토르:라그나로크</td>
+													<th>더빙여부</th>
+													<td>N</td>
+													<th>포스터</th>
+													<td rowspan="4"><img src="/resources/images/movie/bb.jpg"/></td>
+												</tr>
+												<tr>
+													<th>배급일</th>
+													<td>2017-10-25</td>
+													<th>개봉일</th>
+													<td>2017-10-25</td>
+
+
+												</tr>
+												<tr>
+													<th>국가</th>
+													<td>미국</td>
+													<th>장르</th>
+													<td>액션, SF</td>
+												</tr>
+
+											</tbody>
+										</table>
+										<div></div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default"
+												data-dismiss="modal">돌아가기</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</body>
+<script>
+     $(function() {
+         $("#btn-open-modal").click(function() {
+             $("#myModal").modal("show");
+             return false;
+         })
+         $(".highlight").click(function(){
+             $(".highlight").css("background-color", "white");
+             $(this).css("background-color", "red");
+         })
+     })
+</script>
+</html>

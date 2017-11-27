@@ -1,0 +1,21 @@
+package com.es.financial.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.es.financial.mapper.CouponMapper;
+import com.es.financial.vo.Coupon;
+
+@Service
+public class CouponServiceImpl implements CouponService {
+
+	@Autowired
+	private CouponMapper couponMapper;
+	
+	@Override
+	public void addCoupon(Coupon coupon) {
+		
+		couponMapper.addCoupon(coupon);
+	}
+
+}

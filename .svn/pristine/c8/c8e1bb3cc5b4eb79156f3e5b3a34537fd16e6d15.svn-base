@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+#main-box {
+	border: 10px solid #6a5dc0;
+	height: 700px;
+}
+#payment-info-box {
+	margin: 20px;
+	width: 1000px;
+	height: 630px;
+}
+#reprinted-btn {
+		margin-right: 20px;
+	}
+#purchase-info-box {
+	margin: 20px;
+	width: 700px;
+	height: 630px;
+}
+#search-ticket-form {
+	margin-top: 8px;
+	margin-bottom: -5px;
+}
+#receipt-no-input {
+	font-size: 20px;
+}
+#payment-table-box {
+	height: 280px;
+}
+#payment-type-box {
+	height: 170px;
+}
+#purchase-movie-box {
+	height: 250px;
+}
+#purchase-type-box {
+	height: 200px;
+}
+#price-box {
+		background-color: #6a5dc0;
+		font-size: 17px;
+		color: white;
+	}
+#btn-box .btn {
+	margin: 10px;
+	width: 270px;
+	height: 50px;;
+}

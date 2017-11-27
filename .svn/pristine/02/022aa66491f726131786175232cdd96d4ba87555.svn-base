@@ -1,0 +1,171 @@
+package com.es.employee.web;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.es.common.vo.Pagination;
+import com.es.employee.form.EmployeeForm;
+import com.es.employee.service.EmployeeService;
+import com.es.employee.vo.Employee;
+
+@Controller
+public class EmployeeController {
+	
+	@Autowired
+	private EmployeeService empService;
+	
+	private Map<Pagination, List<Employee>> cachedEmployeeList;
+	{
+		this.cachedEmployeeList = new HashMap<Pagination, List<Employee>>();
+	}
+	
+	
+	@PostMapping("/register.esc")
+	public String register(@Valid EmployeeForm empForm, BindingResult result) {
+		Employee employee = new Employee();
+		BeanUtils.copyProperties(empForm, employee);
+		employee = this.empService.register(employee);
+		
+		return "redirect:/employee/index.esc";
+	}
+	
+	@GetMapping("/index.esc")
+	public String index() {
+		return "index";
+	}
+	
+	@GetMapping("/search.esc")
+	public String search(Pagination pagination, Model model) {
+		model.addAttribute("emps", this.fetchEmployees(pagination, model));
+		return "search";
+	}
+
+	@GetMapping("/detail.esc")
+	public String detail(int id) {
+		return "detail";
+	}
+	
+	@GetMapping("/management.esc")
+	public String management() {
+		return "management";
+	}
+	
+	@GetMapping("/punishment.esc")
+	public String punishment(Pagination pagination, Model model) {
+		model.addAttribute("emps", this.fetchEmployees(pagination, model));
+		return "punishment";
+	}
+	@GetMapping("/salary_manage.esc")
+	public String salaryManage(Pagination pagination, Model model) {
+		model.addAttribute("emps", this.fetchEmployees(pagination, model));
+		return "salary_manage";
+	}
+	
+	
+	
+	/**
+	 * employee 데이터 읽기
+	 * @param pagination
+	 * @return
+	 */
+	private List<Employee> fetchEmployees(Pagination pagination, Model model) {
+		if(pagination.getPageNo() == null)
+			pagination.setPageNo(1);
+		
+		String opt = pagination.getOpt();
+		String keyword = pagination.getKeyword();
+		if(opt != null && opt.equals("job_type")) {
+			if("안내".equals(keyword))
+					pagination.setKeyword("I");
+			else if("티켓팅".equals(keyword))
+				pagination.setKeyword("T");
+			if(keyword.length() > 1)
+				pagination.setKeyword("I");
+		} else if (opt != null && opt.equals("id")) {
+			try {
+				pagination.setKeyword("" + Integer.parseInt(keyword));
+			} catch(NumberFormatException ex) {
+				pagination.setKeyword("" + 0);
+			}
+		}
+		
+		
+		if(opt == null && cachedEmployeeList.containsKey(pagination))
+			return cachedEmployeeList.get(pagination);
+		
+		
+		List<Employee> empList = this.empService.searchEmployees(pagination);
+		if(pagination.getOpt() == null )
+			cachedEmployeeList.put(pagination, empList);
+		
+		model.addAttribute("page", pagination);
+		return empList;
+	}
+	
+	
+//	@GetMapping("/sql.esc")
+//	public String insertEmployee() {
+//		Random r = new Random();
+//		Employee c = new Employee();
+//		String[] firstNames = new String[] {"진희", "진주", "효연", "여민", "래선", "희태", "주성", "연강", "소희", "하늘", "명보",
+//				"희창", "은영", "청웅", "찬주", "대문", "민영", "혜미", "희경", "찬호", "태겸", "라예", "미려", "성오", "수천", "경도", "종흠",
+//				"현우", "요훈", "찬우", "보미", "주상", "경우", "선문", "태현", "상민", "민아"};
+//		String[] lastNames = new String [] {"이", "함", "송", "반", "임", "명", "천", "예", "채", "임", "장", "민", "정",
+//				"마", "진", "노", "구", "선", "명", "최", "천", "윤", "소", "민"};
+//		String[] metropolitan = new String[] {
+//				"서울", "인천", "대전", "서울", "서울", "서울", "대구", "대구", "부산", "부산", "울산", "울산", "울산", "울산",
+//				"부산", "서울", "서울", "서울", "서울", "서울", "서울", "서울", "서울", "대전" , "대전", "대전", "대전", "대전", "광주", "광주", "광주", "광주"
+//		};
+//		String[] gu = new String[] {
+//				"은평구", "종로구", "중구", "서구", "남구", "부평구", "분당구", "노원구", "달서구", "중구", "서구", "북구", "남구", "서면" 
+//		};
+//		String[] dong = new String[] {
+//				"묘동", "녹번동", "죽전동", "원평동", "남동", "북동", "진동", "진남동", "서원동", "남서동", "양재동", "노원동", "돈구동"
+//		};
+//		PayHistory history = new PayHistory();
+//		
+//		
+//		int size = 300;
+//		String[] cGender = new String[] {"F", "M"};
+//		String[] jType = new String[] {"I", "T"};
+//		for(int i=0; i<size ; i++) {
+//			String name = lastNames[r.nextInt(lastNames.length)]+firstNames[r.nextInt(firstNames.length)];
+//			String firstPhone = String.format("%4s", String.valueOf(r.nextInt(9999))).replace(" ", "0");
+//			String lastPhone = String.format("%4s", String.valueOf(r.nextInt(9999))).replace(" ", "0");
+//			Date ccreated = DateUtil.yyyymmdd("" + 201 + r.nextInt(8)+ "-"+String.format("2%s", r.nextInt(12)).replace(" ", "0") + "-"+String.format("2%s", r.nextInt(30)).replace(" ", "0"));
+//			
+//			c.setName(name);
+//			c.setPhone("010-"+firstPhone +"-"+ lastPhone);
+//			c.setHourlyPay(6450);
+//			c.setGender(cGender[r.nextInt(2)]);
+//			c.setJobType(jType[r.nextInt(2)]);
+//			c.setAddress(metropolitan[r.nextInt(metropolitan.length)]+" "
+//					+gu[r.nextInt(gu.length)]+" "
+//					+dong[r.nextInt(dong.length)]+" "
+//					+String.format("%3s", String.valueOf(r.nextInt(999))).replace(" ", "5")+"-"+String.format("%2s", String.valueOf(r.nextInt(99))).replace(" ", "2"));
+//			c.setAccountNo(String.format("%5s", String.valueOf(r.nextInt(99999))).replace(" ", "0")+"-"+String.format("%4s", String.valueOf(r.nextInt(9999))).replace(" ", "0")+"-"+String.format("%4s", String.valueOf(r.nextInt(9999))).replace(" ", "0"));
+//			c.setHiredAt(ccreated);
+//			c.setBirth(new Date(ccreated.getTime() - 300000));
+//			
+//			
+//			
+//			
+//			
+//			this.empService.register(c);
+//		}
+//		
+//		return "index";
+//	}
+	
+}

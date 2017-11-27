@@ -1,0 +1,57 @@
+package com.es.pos.vo;
+
+import com.es.management.vo.Customer;
+
+public class TicketReceipt {
+
+	private Integer id;
+	private String rid;
+	private Integer price;
+	private String purchaseType;
+	private Integer discountedPrice;
+	private Pos pos;
+	private Customer customer;
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getRid() {
+		return rid;
+	}
+	public void setRid(String rid) {
+		this.rid = rid;
+	}
+	public Integer getPrice() {
+		return price;
+	}
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
+	public String getPurchaseType() {
+		return purchaseType;
+	}
+	public void setPurchaseType(String purchaseType) {
+		this.purchaseType = purchaseType;
+	}
+	public Integer getDiscountedPrice() {
+		return discountedPrice;
+	}
+	public void setDiscountedPrice(Integer discountedPrice) {
+		this.discountedPrice = discountedPrice;
+	}
+	public Pos getPos() {
+		return pos;
+	}
+	public void setPos(Pos pos) {
+		this.pos = pos;
+	}
+	public Customer getCustomer() {
+		return customer;
+	}
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+}

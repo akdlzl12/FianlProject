@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.financial.mapper.FinTestMapper">
+	<select id="searchCustomers" parameterType="Criteria" resultType="Customer">
+		select 
+			username, 
+			name, 
+			birth, 
+			phone, 
+			email
+		from CUSTOMERS
+		<where>
+			<choose>
+				<when test="opt == 'username'">
+					and username like #{keyword}
+				</when>
+				<when test="opt == 'name'">
+					and name like #{keyword}
+				</when>
+			</choose>
+		</where>
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

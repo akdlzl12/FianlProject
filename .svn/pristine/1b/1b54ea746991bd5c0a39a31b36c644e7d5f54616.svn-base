@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.movie.mapper.MovieMapper">
+<!-- 영화 등록   -->
+	<select id="getMovieSeq" resultType="int" >
+		select seq_movies.nextval from dual
+	</select>
+	
+	<insert id="addMovie" parameterType="Movie">
+		insert into movies
+		(id, publish_date, open_date, age_limit, dubbed)
+		values
+		(#{id}, #{publishDate}, #{openDate}, #{ageLimit}, #{dubbed})
+	</insert>
+	
+	<insert id="addMovieGenre" parameterType="MovieGenre">
+		insert into movie_genre
+		(id, movie_id, genre_id)
+		values
+		(seq_movie_genre.nextval, #{movieId}, #{genreId})
+	</insert>
+	
+	<insert id="addGenreTransalation" parameterType="GenreTranslation">
+		insert into genre_translation
+		(id, type, lang_iso, genre_id)
+		values
+		(seq_genre_translation.nextval, #{type}, 'ko', #{genre.id})
+	</insert>
+	
+	<insert id="addMovieImage" parameterType="MovieImage">
+		insert into movie_images
+		(id, image_uri, movie_id)
+		values
+		(seq_movie_images.nextval, #{imageUri}, #{movie.id})
+	</insert>
+	
+	<insert id="addMovieTranslation" parameterType="MovieTranslation">
+		insert into movie_translation
+		(id, name, publish_country, description, movie_id, lang_iso)
+		values
+		(seq_movie_translation.nextval, #{name}, #{publishCountry}, #{description}, #{movie.id}, 'ko')
+	</insert>
+<!-- 영화 조회  -->
+	<select id="searchByMovieTranslation" parameterType="Criteria" resultType="MovieTranslation">
+		select
+			A.name  			name,
+			B.id				"movie.id",
+			B.age_limit			"movie.ageLimit",
+			B.publish_date		"movie.publishDate",
+			B.open_date			"movie.openDate",
+			B.close_date		"movie.closeDate",
+			B.dubbed			"movie.dubbed"
+				
+		from movie_translation A, movies B
+		where A.movie_id = B.id
+			<if test="keyword != null || keyword != '' ">
+				<choose>
+					<when test="opt == 'name' ">
+					and name like '%' || #{keyword} || '%'
+					</when>
+					<when test="opt == 'publishDate'">
+					and publishDate like '%' || #{keyword} || '%'
+					</when>
+					<when test="opt == 'openDate' ">
+					and openDate like '%' || #{keyword} || '%'
+					</when>
+					<when test="opt == 'closeDate' ">
+					and closeDate like '%' || #{keyword} || '%'
+					</when>
+				</choose>
+			</if>
+	</select>
+<!-- 영화 상세정보  -->
+	<select id="getMovieTranslation" parameterType="int" resultType="MovieTranslation">
+		select
+			id				id,
+			name			name,
+			description		description,
+			publish_country	publishCountry,
+			lang_iso		langiso,
+			lang_default	langdefault,
+			movie_id		"movie.id"
+		from 
+			movie_translation
+		where 
+			movie_id = #{value}
+	</select>
+	
+	<select id="getMovieImage" parameterType="int" resultType="MovieImage">
+		select
+			id			id,
+			image_uri	imageUri,
+			movie_id	"movie.id"
+		from 
+			MOVIE_IMAGES
+		where
+			movie_id = #{value}
+	</select>
+	
+	<select id="getGenreTranslation" parameterType="int" resultType="GenreTranslation">
+		select
+			A.id,
+			A.type,
+			A.lang_iso,
+			A.lang_default,
+			A.genre_id,
+			B.movie_id
+		from 
+			genre_translation A , movie_genre B
+		where 
+			A.genre_id = B.genre_id
+		and
+			movie_id = #{value}
+	</select>
+	
+	<select id="getMovie" parameterType="int" resultType="Movie">
+		
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

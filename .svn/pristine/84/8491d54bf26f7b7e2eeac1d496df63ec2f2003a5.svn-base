@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.financial.mapper.DailyReportMapper">
+	<select id="nextId" resultType="int">
+		select seq_daily_reports.nextval
+		from dual
+	</select>
+	<insert id="insert" parameterType="DailyReport">
+		insert into daily_reports (id, report, working_date, mismatch_money, admin_id, employee_id, pos_id)
+		values
+		(#{id}, #{report}, #{workingDate}, #{mismatchMoney}, 0, #{employeeId}, #{posId})
+	</insert>
+	
+	<select id="readMismatchTotalMoney" parameterType="int">
+		select nvl(sum(D.mismatch_money), 0) as total
+		from employees E, daily_reports D
+		where E.id = D.employee_id
+	</select>
+	
+	<select id="readMismatchRecordByEmpIdAndDate" parameterType="hashmap" resultType="DailyReport">
+		select
+			id,
+			report,
+			working_date as workingDate,
+			mismatch_money as mismatchMoney
+		from
+			daily_reports
+		where
+			to_char(working_date, 'YYYYMM') = to_char(#{when}, 'YYYYMM')
+			and employee_id = #{id}
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

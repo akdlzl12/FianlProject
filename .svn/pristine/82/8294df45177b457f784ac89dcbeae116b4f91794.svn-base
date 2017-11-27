@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.movie.mapper.ScreenMapper">
+	<!-- 단순 SeatId로 Seat조회 -->
+	<select id="getSeatBySeatId" parameterType="int" resultType="Seat">
+		select
+			id
+			,status
+			,detail
+			,name
+		from seats
+		where id = #{value}
+	</select>
+	
+	<!-- screenId로 모든 Seat 조회 -->
+	<select id="getSeatsByScreenId" parameterType="int" resultType="Seat">
+		select
+			A.id				"screen.id"
+			,A.seats_count		"screen.seatsCount"
+			,A.NAME				"screen.name"
+			,B.id				id
+			,B.status			status
+			,B.detail			detail
+			,B.name				name
+		from screens A, seats B
+		where A.id = B.screen_id
+		and A.id = #{value}
+		order by B.id
+	</select>
+	<!-- 시간표조회 예약석 뽑기  -->
+	<select id="getReservedSeatsByTimetableId" parameterType="int" resultType="Ticket">
+		select
+			C.id				"movieTimetable.id"
+			,C.started_at		"movieTimetable.statedAt"
+			,C.ended_at			"movieTimetable.endedAt"
+			,C.ordered			"movieTimetable.ordered"
+			,D.id				id
+			,D.seat_id			"seat.id"
+			,E.name				"seat.name"
+		from movie_timetable C, tickets D, seats E
+		where C.id = D.movie_timetable_id
+		and E.id = D.seat_id
+		and C.id = #{value}
+	</select>
+	
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

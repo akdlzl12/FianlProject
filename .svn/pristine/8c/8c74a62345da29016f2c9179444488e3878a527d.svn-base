@@ -1,0 +1,91 @@
+package com.es.vo;
+
+import java.util.Date;
+
+public class Employee {
+	private int id;
+	private String name;
+	private String address;
+	private String phone;
+	private int hourlyPay;
+	private char gender;
+	private Date birth;
+	private String accountNo;
+	private char jobType;
+	private Date hireAt;
+	private Date dismissedAt;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public int getHourlyPay() {
+		return hourlyPay;
+	}
+	public void setHourlyPay(int hourlyPay) {
+		this.hourlyPay = hourlyPay;
+	}
+	public char getGender() {
+		return gender;
+	}
+	public void setGender(char gender) {
+		this.gender = gender;
+	}
+	public Date getBirth() {
+		return birth;
+	}
+	public void setBirth(Date birth) {
+		this.birth = birth;
+	}
+	public String getAccountNo() {
+		return accountNo;
+	}
+	public void setAccountNo(String accountNo) {
+		this.accountNo = accountNo;
+	}
+	public char getJobType() {
+		return jobType;
+	}
+	public void setJobType(char jobType) {
+		this.jobType = jobType;
+	}
+	public Date getHireAt() {
+		return hireAt;
+	}
+	public void setHireAt(Date hireAt) {
+		this.hireAt = hireAt;
+	}
+	public Date getDismissedAt() {
+		return dismissedAt;
+	}
+	public void setDismissedAt(Date dismissedAt) {
+		this.dismissedAt = dismissedAt;
+	}
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + ", address=" + address + ", phone=" + phone + ", hourlyPay="
+				+ hourlyPay + ", gender=" + gender + ", birth=" + birth + ", accountNo=" + accountNo + ", jobType="
+				+ jobType + ", hireAt=" + hireAt + ", dismissedAt=" + dismissedAt + "]";
+	}
+	
+	
+}

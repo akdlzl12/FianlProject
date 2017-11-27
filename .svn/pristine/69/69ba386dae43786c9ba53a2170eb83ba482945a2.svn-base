@@ -1,0 +1,34 @@
+package com.es.employee.vo;
+
+public class EmployeeManagement {
+
+	private Integer id;
+	private String detail;
+	private Integer deleted;
+	private EmployeeTimetable employeeTimetable;
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getDetail() {
+		return detail;
+	}
+	public void setDetail(String detail) {
+		this.detail = detail;
+	}
+	public Integer getDeleted() {
+		return deleted;
+	}
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+	public EmployeeTimetable getEmployeeTimetable() {
+		return employeeTimetable;
+	}
+	public void setEmployeeTimetable(EmployeeTimetable employeeTimetable) {
+		this.employeeTimetable = employeeTimetable;
+	}
+}

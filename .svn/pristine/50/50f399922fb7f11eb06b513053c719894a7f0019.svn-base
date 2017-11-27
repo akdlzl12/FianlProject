@@ -1,0 +1,12 @@
+package com.es.management.mapper;
+
+import java.util.List;
+
+import com.es.management.vo.Customer;
+
+public interface CustomerMapper {
+
+	List<Customer> getAllCustomers();
+	
+	Customer getDetailCustomer(int id);
+}

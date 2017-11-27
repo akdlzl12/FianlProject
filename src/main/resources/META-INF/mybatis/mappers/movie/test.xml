@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.movie.mapper.MovTestMapper">
+	<!-- 
+	void addMovieTranslation(MovieTranslation movieTranslation);
+	void addMovie(Movie movie);
+	void addMovieImage(MovieImage movieimage);
+	void addGenre(Genre genre);
+	void addMovieGenre(MovieGenre movieGenre);
+	void addGenreTransalation(GenreTranslation genreTranslation);
+	int getGenreSeq();
+	int getMovieSeq(); -->
+	
+	<select id="getMovieSeq" resultType="int" >
+		select seq_movies.nextval from dual
+	</select>
+	
+	<insert id="addMovie" parameterType="Movie">
+		insert into movies
+		(id, publish_date, open_date, age_limit, dubbed)
+		values
+		(#{id}, #{publishDate}, #{openDate}, #{ageLimit}, #{dubbed})
+	</insert>
+	
+	<insert id="addMovieGenre" parameterType="MovieGenre">
+		insert into movie_genre
+		(id, movie_id, genre_id)
+		values
+		(seq_movie_genre.nextval, #{movieId}, #{genreId})
+	</insert>
+	
+	<insert id="addGenreTransalation" parameterType="GenreTranslation">
+		insert into genre_translation
+		(id, type, lang_iso, genre_id)
+		values
+		(seq_genre_translation.nextval, #{type}, 'ko', #{genre.id})
+	</insert>
+	
+	<insert id="addMovieImage" parameterType="MovieImage">
+		insert into movie_images
+		(id, image_uri, movie_id)
+		values
+		(seq_movie_images.nextval, #{imageUri}, #{movie.id})
+	</insert>
+	
+	<insert id="addMovieTranslation" parameterType="MovieTranslation">
+		insert into movie_translation
+		(id, name, publish_country, description, movie_id, lang_iso)
+		values
+		(seq_movie_translation.nextval, #{name}, #{publishCountry}, #{description}, #{movie.id}, 'ko')
+	</insert>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

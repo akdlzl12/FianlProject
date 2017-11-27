@@ -1,0 +1,26 @@
+<%@ page pageEncoding="UTF-8"%>
+    
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="select.html" class="navbar-brand">
+                    <img alt="brand" src="images/logo.jpg" style="width: 150px;"/>
+                </a>
+            </div>
+            
+            <div id="nav-ul-box">
+                <ul class="nav navbar-nav">
+                    <li><p class="navbar-text"><label>출근시간</label> 17:03</p></li>
+                    <li><p class="navbar-text"><label>POS</label> B01</p></li>
+                    <li><p class="navbar-text"><label>현재시간</label> <span id="now-time"></span></p></li>
+                    <li>
+                        <p class="navbar-text">
+                            <label>김환희님</label>
+                            <a href="logout.html" class="btn btn-boots text-right">휴식</a>
+                            <a href="logout.html" class="btn btn-boots text-right">Log-out</a>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>

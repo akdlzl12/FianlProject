@@ -1,0 +1,62 @@
+@charset "UTF-8";
+
+#main-box {
+	border: 10px solid #6a5dc0;
+	height: 700px;
+}
+#movie-list-box {
+    height: 573px;
+    font-size: 15px;
+}
+#time-table-box, #price-box {
+	overflow: scroll;
+	height: 550px;
+	font-size: 17px;
+}
+.selected-movie, .selected-time {
+	background-color: #6a5dc0;
+}
+#price-key-box, #final-check-box {
+	height: 57px;
+}
+.btn-before-hide, .btn-after-hide {
+	display: none;
+}
+.move-key-btn {
+	margin-right: 8px;
+	padding-right: 28px;
+	width: 25px;
+	height: 57px;
+	font-size: 17px;
+}
+.price-key-btn {
+	margin: 1px;
+	padding: 6px;
+	width: 100px;
+}
+#seat-select-btn {
+    width: 200px;
+    height: 57px;
+}
+#total-price-box {
+    margin-top: -2px;
+    background-color: #6a5dc0;
+    font-size: 16px;
+    color: white;
+}
+#grade-0 {
+    background-color: forestgreen;
+    font-size: 14px;
+}
+#grade-12 {
+    background-color: cornflowerblue;
+    font-size: 14px;
+}
+#grade-15 {
+    background-color: darkgoldenrod;
+    font-size: 14px;
+}
+#grade-18 {
+    background-color: firebrick;
+    font-size: 14px;
+}

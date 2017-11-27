@@ -1,0 +1,51 @@
+package com.es.common.vo;
+
+public class MovieRankNameForm {
+
+	private String name;
+	private Integer movieRank;
+	private Integer no;
+	private String month;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getMovieRank() {
+		return movieRank;
+	}
+
+	public void setMovieRank(Integer movieRank) {
+		this.movieRank = movieRank;
+	}
+
+	public Integer getNo() {
+		return no;
+	}
+
+	public void setNo(Integer no) {
+		this.no = no;
+	}
+
+	public String getMonth() {
+		return month;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
+	}
+
+	@Override
+	public String toString() {
+		return "MovieRankNameForm [name=" + name + ", movieRank=" + movieRank + ", no=" + no + ", month=" + month + "]";
+	}
+
+	
+	
+	
+	
+}

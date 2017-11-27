@@ -1,0 +1,130 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/common/taglibs.jsp" %>
+<html>
+<head>
+	<title>영화등록</title>
+	
+	<%@ include file="/WEB-INF/views/common/head.jsp" %>
+	<style>
+        .form-group {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+	<c:set var="nav_active" value="movie"/>
+	<%@ include file="/WEB-INF/views/common/nav.jsp" %>
+	<div class="row">
+		<div class="col-md-2 div-side">
+			<c:set var="side_active" value="m3one" />
+			<%@ include file="/WEB-INF/views/movie/common/side_movie.jsp" %>
+		</div>
+		<div class="col-md-10">
+			<div class="container">
+				<form class="form-horizontal"
+					style="border: 1px solid black; margin-top: 30px;">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="movie-title">영화명</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" id="movie-title"
+									name="movietitle">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="distribution-date">배급일</label>
+							<div class="col-sm-6">
+								<input type="date" class="form-control" id="distribution-date"
+									name="distributiondate">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="release-date">개봉일</label>
+							<div class="col-sm-6">
+								<input type="date" class="form-control" id="release-date"
+									name="releasedate">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="movie-genre">장르</label>
+							<div class="col-sm-6" style="border: 1px solid black;">
+								<div>
+									<label> <input type="checkbox" id="movie-genre-comdy"
+										name="releasedate"> 코미디
+									</label> <label> <input type="checkbox" id="movie-genre-comdy"
+										name="releasedate"> 코미디
+									</label> <label> <input type="checkbox" id="movie-genre-comdy"
+										name="releasedate"> 코미디
+									</label>
+								</div>
+								<div>
+									<label> <input type="checkbox" id="movie-genre-comdy"
+										name="releasedate"> 코미디
+									</label> <label> <input type="checkbox" id="movie-genre-comdy"
+										name="releasedate"> 코미디
+									</label> <label> <input type="checkbox" id="movie-genre-comdy"
+										name="releasedate"> 코미디
+									</label>
+								</div>
+								<div>
+									<label> <input type="checkbox" id="movie-genre-comdy"
+										name="releasedate"> 코미디
+									</label> <label> <input type="checkbox" id="movie-genre-comdy"
+										name="releasedate"> 코미디
+									</label> <label> <input type="checkbox" id="movie-genre-comdy"
+										name="releasedate"> 코미디
+									</label>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="release-date">더빙</label>
+							<div class="col-sm-6">
+								<label> <input type="radio" class="" id="dubbY"
+									name="releasedate"> Y
+								</label> <label> <input type="radio" class="" id="dubbY"
+									name="releasedate"> N
+								</label>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="release-date">국가</label>
+							<div class="col-sm-6">
+								<input type="text" id="contuary" name="contuary">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="release-date">이미지</label>
+							<div class="col-sm-6">
+								<input type="file" id="contuary" name="contuary">(.jsp,
+								.png)
+							</div>
+						</div>
+					</div>
+
+
+
+
+
+
+					<div class="form-group">
+						<div class="col-sm-offset-10 col-sm-2">
+							<button type="submit" class="btn btn-default">등록</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>

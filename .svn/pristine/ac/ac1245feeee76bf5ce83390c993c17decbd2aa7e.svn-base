@@ -1,0 +1,8 @@
+package com.es.financial.service;
+
+import com.es.financial.vo.Coupon;
+
+public interface CouponService {
+	
+	void addCoupon(Coupon coupon);
+}

@@ -1,0 +1,31 @@
+package com.es.pos.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.es.employee.vo.Employee;
+import com.es.pos.mapper.PosTestMapper;
+
+@Service
+public class LogServiceImpl implements LogService {
+
+	@Autowired
+	private PosTestMapper posTestMapper;
+	
+	@Override
+	public Employee findEmployeeById(long id, long pwd) {
+		Employee employee = posTestMapper.getEmployeeByIdentifier(id);
+		if(employee == null) {
+			throw new RuntimeException("잘못된 ID 혹은 비밀번호 입니다.");
+		}
+		
+		long noMinusPhone = Long.parseLong(employee.getPhone().replaceAll("-", ""));
+		System.out.println(noMinusPhone);
+		System.out.println(pwd);
+		if(noMinusPhone != pwd) {
+			throw new RuntimeException("잘못된 ID 혹은 비밀번호 입니다.");			
+		}
+		return employee;
+	}
+
+}

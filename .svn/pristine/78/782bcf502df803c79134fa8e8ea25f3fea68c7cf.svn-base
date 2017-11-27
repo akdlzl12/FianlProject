@@ -1,0 +1,28 @@
+package com.es.employee.web;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class EmployeeController {
+	
+	@GetMapping("/index.esc")
+	public String index() {
+		return "index";
+	}
+	
+	@GetMapping("/search.esc")
+	public String search() {
+		return "search";
+	}
+	
+	@GetMapping("/management.esc")
+	public String management() {
+		return "management";
+	}
+	
+	@GetMapping("/punishment.esc")
+	public String punishment() {
+		return "punishment";
+	}
+}

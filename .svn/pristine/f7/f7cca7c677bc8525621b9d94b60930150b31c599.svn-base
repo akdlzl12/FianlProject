@@ -1,0 +1,9 @@
+package com.es.management.service;
+
+import java.util.List;
+
+import com.es.management.vo.Discount;
+
+public interface DiscountEventService {
+	List<Discount> getDiscount(int discountId);
+}

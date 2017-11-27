@@ -1,0 +1,10 @@
+package com.es.pos.mapper;
+
+import com.es.employee.vo.EmployeeTimetable;
+import com.es.pos.vo.PosLoginHistory;
+
+public interface PosMapper {
+
+	void addLoginHistory(PosLoginHistory posLoginHistory);
+	void addEmployeeTimetable(EmployeeTimetable employeeTimetable);
+}
