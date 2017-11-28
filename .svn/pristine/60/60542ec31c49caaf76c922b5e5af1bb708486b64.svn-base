@@ -95,7 +95,7 @@
                      <label class="control-label col-xs-1" for="customerTypeId">적용대상:</label>
                      <div class="col-sm-5">          
                        <select name="customerTypeId" id="customerTypeId" class="form-control">
-                           <option value="4">전체</option>  
+                           <option value="4">전체</option>
                            <c:forEach var="value" items="${customerTypeList }">
 	                           <option value="${value.id }">${value.type }</option>
                            </c:forEach>

@@ -74,6 +74,47 @@ $(function() {
 		return str;
 	};
 	
+	// 카드 번호 자동 "-" 추가 function
+	var autoMinus = function(str) {
+		str = str.replace(/[^0-9]/g, '');
+		var tmp = '';
+		
+		if(str.length < 4){
+			return str;
+		} else if(str.length < 8){
+			tmp += str.substr(0, 4);
+			tmp += '-';
+			tmp += str.substr(4);
+			return tmp;
+		} else if(str.length < 12){
+			tmp += str.substr(0, 4);
+			tmp += '-';
+			tmp += str.substr(4, 4);
+			tmp += '-';
+			tmp += str.substr(8);
+			return tmp;
+		} else if(str.length <= 16) {        
+			tmp += str.substr(0, 4);
+			tmp += '-';
+			tmp += str.substr(4, 4);
+			tmp += '-';
+			tmp += str.substr(8, 4);
+			tmp += '-';
+			tmp += str.substr(12, 4);
+			return tmp;
+		} else {
+			tmp += str.substr(0, 4);
+			tmp += '-';
+			tmp += str.substr(4, 4);
+			tmp += '-';
+			tmp += str.substr(8, 4);
+			tmp += '-';
+			tmp += str.substr(12, 4);
+			return tmp;
+		}
+		return str;
+	}
+	
 	// 첫 시작시 총금액 계산 & 실금액 계산 & Key 가격 높은 순으로 배열
 	calculTotalPrice();
 	
@@ -97,7 +138,7 @@ $(function() {
             htmlContents += "		<label class='payment-info-label'>받은 금액</label>";
             htmlContents += "	</div>";
             htmlContents += "	<div class='col-sm-9'>";
-            htmlContents += "		<input type='text' name='takenPrice' id='taken-price' class='form-control'/>";
+            htmlContents += "		<input type='number' name='takenPrice' id='taken-price' class='form-control'/>";
             htmlContents += "	</div>";
             htmlContents += "</div>";
             
@@ -124,6 +165,12 @@ $(function() {
         $("input[name='purchaseType']").val(payment);
     });
     $("input[value='C']").trigger("click");
+    
+    // 카드 번호 자동 "-" 입력 위임 Event
+    $("#needed-payment-box").on("keyup", "#card-no", function() {
+    	var autoNo = autoMinus($(this).val());
+		$(this).val(autoNo);
+    });
     
     // 현금 금액 btn 금액 덧셈 위임 Event
     $("#needed-payment-box").on("click", ".cash-btn", function() {
