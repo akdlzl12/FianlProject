@@ -55,13 +55,18 @@
     		if(receiptNo) {
     			$.ajax({
     				type:"POST",
-    				url:"reprint.esc",
+    				url:"checkreceipt.esc",
     				data:{rid:receiptNo},
     				dataType:"json",
     				success:function(result) {
     					if(result.success) {
     						$("#search-ticket-form").submit();
     					} else {
+    						$("#payment-table-box table tbody").empty();
+    						$("#payment-type-box table tbody").empty();
+    						$("#purchase-movie-box table tbody").empty();
+    						$("#purchase-type-box table tbody").empty();
+    						$("#total-price-box").empty();
     						alert(result.message);
     					}
     				},
@@ -85,10 +90,8 @@
     				data:{rid:receiptNo},
     				dataType:"json",
     				success:function(result) {
-    					if(result.success && result.receipt.printed == 'N') {
+    					if(result.success) {
     						alert("출력이 완료되었습니다.");
-    					} else if(result.success && result.receipt.printed == 'Y') {
-    						alert("이미 출력된 티켓입니다. 관리자에게 문의하세요.");
     					} else {
     						alert(result.message);
     					}
@@ -106,6 +109,10 @@
     	$("#refund-btn").on("click", function(e) {
     		e.preventDefault();
     		
+    		if($("#hidden-receipt-no").val() == "") {
+    			alert("조회를 먼저 진행해 주세요.");
+    			return false;
+    		}
     		$("#check-refund-modal").modal("show");
     	});
     	

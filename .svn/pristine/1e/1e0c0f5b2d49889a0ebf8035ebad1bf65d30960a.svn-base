@@ -1,0 +1,278 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/common/taglibs.jsp"%>
+<html>
+<head>
+<title>Home</title>
+<style>
+
+div.row {
+	margin: 10px;
+	padding: 10px;
+}
+
+.margin-right {
+	margin-right: 16px;
+}
+</style>
+<%@ include file="/WEB-INF/views/common/head.jsp"%>
+</head>
+<body>
+	<c:set var="nav_active" value="financial" />
+
+	<%@ include file="/WEB-INF/views/common/nav.jsp"%>
+	<div class="row">
+		<div class="col-md-2 div-side" >
+			<c:set var="side_active" value="calculate" />
+			<%@ include file="/WEB-INF/views/financial/sidebar/sideBar.jsp"%>
+		</div>
+		<div class="col-md-10">
+			<div class="container" style="margin-top: 50px;">
+				<form action="" method="post">
+				<h2 class="page-header">단말기 정산</h2>
+				<div class="row box">
+					<div class="col-md-4">
+						<label class="margin-right">날짜</label>
+						<input type="date" class= "form-control" id="date"/>
+					</div>
+					<div class="col-md-4">
+						<label class="margin-right">단말기 번호</label> 
+						<select class="form-control" name="posNo" id="posNo">
+							<option>미선택</option>
+						</select>
+					</div>
+					<div class="col-md-4">
+						<label class="margin-right">판매자</label> 
+						<select class="form-control" name="employee" id="employee">
+							<option>미선택</option>
+						</select>
+					</div>
+				</div>
+				</form>
+				<div class="row box">
+					<div>
+						<table class="table table-condensed ">
+							<thead>
+								<tr>
+									<th>시간</th>
+									<th>구매목록</th>
+									<th>총 금액</th>
+									<th>할인액</th>
+									<th>결제금액</th>
+								</tr>
+							</thead>
+							<tbody id="searchTable">
+								
+							</tbody>
+						</table>
+					</div>
+					
+					<div class="form-group col-md-6">
+						<label>기본금</label>
+						<h4 class="margin-center">200000</h4>
+					</div>
+					<div class="form-group col-md-6">
+						<label>총 결제 금액</label>
+						<h4 class="margin-center"  id="totalPrice">0</h4>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-11">
+						<button type="button" class="btn btn-default" id="btn-modal"><i class="fa fa-list fa-fw"></i>상세조회</button>
+					</div>
+				</div>
+				<div class="modal fade" id="form-modal" role="dialog">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">상세조회</h4>
+							</div>
+							<form>
+								<div class="modal-body">
+									<label class="control-label">구매 목록</label>
+									<div class="row box">
+										<table class="table table-condensed ">
+											<thead>
+												<tr>
+													<th class="col-sm-3">상품명</th>
+													<th class="col-sm-3">금액</th>
+													<th class="col-sm-3">할인명</th>
+													<th class="col-sm-3">할인금</th>
+												</tr>
+											</thead>
+											<tbody class="form-group" id="modalList">
+												
+												
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<div class="col-sm-12">
+										<label></label>
+									</div>
+									<div class="col-sm-12">
+										<button type="button" class="btn btn-default btn-sm"
+											data-dismiss="modal">닫기</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+$(function(){
+	
+	// 날짜 선택
+	$("#date").on("change", function(){
+			
+		var day = $("#date").val();
+		
+		
+		$.ajax({
+			type:"GET",
+			url:"searchPosNo.esc",
+			data:{
+				date : day
+				/* posNo : pos,
+				employee : seller */
+			},
+			dataType:"json",
+			success:function(result){
+				var html = "";
+				html += "<option>선택</option>";
+				$.each(result, function(index, item){
+					html += "<option value='"+item.pid+"' name='"+item.pid+"'>"+item.pid+"</option>" 
+					
+				});
+				$("#posNo").html(html);
+			}
+		})
+	});
+	
+	// 포스기 선택
+	$("#posNo").on("change", function(){
+		var dates = $('#date').val();
+		var num = $("#posNo").val();
+		
+		
+		$.ajax({
+			type:"GET",
+			url:"searchSeller.esc",
+			data:{
+				date : dates
+				/* posNo : pos,
+				employee : seller */
+			},
+			dataType:"json",
+			success:function(result){
+				
+				var html = "";
+				html += "<option>선택</option>";
+				$.each(result, function(index, item){
+					if(this.pos.pid == num){
+					
+					html += "<option value='"+item.employee.name+"'>"+item.employee.name+"</option>" 
+					}
+				});
+				$("#employee").html(html);
+			}
+		})
+	})
+	
+	// 리스트 출력
+	$("#employee").on("change", function(){
+		 var dates = $("#date").val();
+		 var posNo = $("#posNo").val(); 
+		 var employee = $("#employee").val();
+		 
+		$.ajax({
+			type:"POST",
+			url:"searchReceipts.esc",
+			data:{
+				name:employee,
+				posName:posNo,
+				time:dates
+			},
+			dataType:"json",
+			success:function(result){
+				var html = "";
+				var plus = 0;
+					$.each(result, function(index, item){
+						
+						html += "<tr class='highlight' style='background-color: white' id='"+item.id+"'>"
+						html += "<td>"+item.time.substr(10,19)+"</td>"	
+						html += "<td>"+item.name+"</td>" 	
+						html += "<td>"+item.price+"</td>"	
+						html += "<td>"+item.discount+"</td>"	
+						html += "<td>"+(item.price + item.discount)+"</td>"	
+						html += "</tr>"	
+						
+						plus += (item.price + item.discount);
+					})
+				$("#totalPrice").text(plus);
+				$("#searchTable").html(html);
+			
+			}
+		})
+	})
+				
+	
+	
+	// 하이라이트
+	$("#searchTable").on("click",".highlight", function() {
+		$(".highlight").css("background-color", "white");
+		$(this).css("background-color", "#aaa");	
+		
+		var value = $(this).attr('id');
+		
+		// 모달
+		if(value){
+			$("#btn-modal").click(function() {
+				$("#form-modal").modal("show");
+				
+				$.ajax({
+					type:"GET",
+					url:"searchRceiptsIdByDiscountInfo.esc",
+					data:{
+						id:value
+					},
+					dataType:"json",
+					success:function(result){
+						var html="";
+						var total=0;
+						$.each(result, function(index, item){
+							
+						html += "<tr class='highlight' style='background-color: white'>"
+						html += "<td class='col-sm-3'>"+item.movieName+"</td>"
+						// 나누기 티켓수
+						html += "<td class='col-sm-3'>"+item.ticketPrice+"</td>"
+						html += "<td class='col-sm-3'>"+item.name+"</td>"
+						html += "<td class='col-sm-3'>-"+item.discountPrice+"</td>"
+						html += "</tr>"
+						html +=	"<div id='total'>"
+						html += "<tr>"
+						html += "<td class='col-sm-3'>총액</td>"
+						html += "<td class='col-sm-3'>"+(item.ticketPrice - item.discountPrice) +"</td>"
+						html += "<td class='col-sm-3'></td>"
+						// 곱하기 티켓수
+						html += "<td class='col-sm-3'>-"+item.discountPrice+"</td>"
+						html += "</tr>"
+						html += "</div>"
+						total += item.ticketPrice;
+						})
+						$("#modalList").html(html);
+						$("label").html("<strong class='margin-right'>총 결제 금액 :</strong>"+total);
+					}
+					
+				})
+			});
+		}
+	})
+});
+</script>
+</html>

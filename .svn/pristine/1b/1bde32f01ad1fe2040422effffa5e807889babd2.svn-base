@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.es.pos.mapper.PosMapper">
+	<select id="addLoginHistorySeq" resultType="int">
+		select seq_pos_login_history.nextval
+		from dual
+	</select>
+
+	<insert id="addPosLoginHistory" parameterType="PosLoginHistory">
+		insert into pos_login_history (id, signed_in_at, employee_id, pos_id)
+		values (#{id}, #{signedIn}, #{employee.id}, #{pos.id})
+	</insert>
+	
+	<insert id="addEmployeeTimetable" parameterType="EmployeeTimetable">
+		insert into employee_timetable (id, started_at, employee_id)
+		values (seq_employee_timetable.nextval, #{startedAt}, #{employee.id})
+	</insert>
+	
+	<select id="getPosById" parameterType="int" resultType="Pos">
+		select
+			id
+			,pid			pId
+		from pos
+		where id = #{value}
+	</select>
+	
+	<select id="getEmployeeTimetableByPosHistory" parameterType="PosLoginHistory" resultType="EmployeeTimetable">
+		select 
+			id
+			,started_at			startedAt
+			,ended_at			endedAt
+			,employee_id		"employee.id"
+			,rest_started_at	restStartedAt
+			,rest_ended_at		restEndedAt
+		from employee_timetable
+		where to_char(started_at, 'yyyy-mm-dd') = to_char(#{signedIn}, 'yyyy-mm-dd')
+		and employee_id = #{employee.id}
+	</select>
+	
+	<update id="updatePosLoginHistory" parameterType="PosLoginHistory">
+		update pos_login_history
+		<set>
+			<if test="signedIn != null">
+				signed_in_at = #{signedIn},
+			</if>
+			<if test="signedOut != null">
+				signed_out_at = #{signedOut},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<update id="updateEmployeeTimetable" parameterType="EmployeeTimetable">
+		update employee_timetable
+		<set>
+			<if test="startedAt != null">
+				started_at = #{startedAt},
+			</if>
+			<if test="endedAt != null">
+				ended_at = #{endedAt},
+			</if>
+			<if test="restStartedAt != null">
+				rest_started_at = #{restStartedAt},
+			</if>
+			<if test="restEndedAt != null">
+				rest_ended_at = #{restEndedAt},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	 <select id="searchDateByPosId" parameterType="date" resultType="Pos">
+		select 
+			distinct
+			A.POS_ID	id,
+			B.PID		pid
+			
+		from POS_LOGIN_HISTORY A, POS B
+		where A.POS_id = B.id
+		and A.SIGNED_IN_AT between to_date(to_char(#{value}, 'yyyy-mm-dd')) and to_date(to_char(#{value}+1, 'yyyy-mm-dd'))
+		order by A.pos_id asc
+	</select>  
+	
+	<select id="searchDateByEmployeeId" parameterType="date" resultType="PosLoginHistory">
+		select
+			
+			distinct
+			C.id		"pos.id",
+			C.pid		"pos.pid",
+			B.NAME		"employee.name",
+			B.id		"employee.id"
+			
+		from POS_LOGIN_HISTORY A, EMPLOYEES B, POS C
+		where A.EMPLOYEE_ID = B.ID
+		and A.POS_ID = C.ID
+		and A.SIGNED_IN_AT between to_date(to_char(#{value}, 'yyyy-mm-dd')) and to_date(to_char(#{value}+1, 'yyyy-mm-dd'))
+	</select>
+	<select id="searchTicket" parameterType="int" resultType="PosForm">
+		select 
+		distinct
+		E.id		id,
+		D.NAME		name,
+		E.PRICE		price,
+		E.DISCOUNTED_PRICE	discount,
+		E.PURCHASE_DATE time
+		
+		from TICKETS A, MOVIE_TIMETABLE B, SCREEN_MOVIES C, MOVIE_TRANSLATION D, TICKET_RECEIPTS E, MOVIES F
+		where A.MOVIE_TIMETABLE_ID = B.ID
+		and B.SCREEN_MOVIE_ID = C.ID
+		and C.MOVIE_ID = F.ID
+		and F.ID = D.MOVIE_ID
+		and E.ID = A.TICKET_RECEIPT_ID
+		and E.ID = #{id}
+		and D.lang_iso = 'ko'
+		order by E.PURCHASE_DATE
+	</select>
+	<select id="searchReceipts" parameterType="PosForm" resultType="TicketReceipt">
+ 		select
+		 distinct
+			D.id 	id
+		from POS_LOGIN_HISTORY A, EMPLOYEES B, POS C, TICKET_RECEIPTS D, TICKETS E
+		where 
+			A.EMPLOYEE_ID = B.ID
+		and A.POS_ID = C.ID
+		and C.id = D.POS_ID
+		and D.id = E.TICKET_RECEIPT_ID
+		and B.NAME = #{name}
+		and C.PID = #{posName}
+		and D.PURCHASE_DATE &gt;= A.SIGNED_IN_AT
+		and D.PURCHASE_DATE &lt;= A.SIGNED_OUT_AT
+		and A.SIGNED_IN_AT between to_date(to_char(#{time}, 'yyyy-mm-dd')) and to_date(to_char(#{time}+1, 'yyyy-mm-dd'))
+	</select>
+	<select id="searchRceiptsIdByDiscountInfo" parameterType="int" resultType="Discount">
+		select
+		C.DISCOUNT_PRICE		discountPrice,
+		C.NAME					name
+		
+		from TICKET_RECEIPTS A, DISCOUNT_TICKET B, DISCOUNTS C
+		where A.id = B.TICKET_RECEIPT_ID
+		and B.DISCOUNT_ID = C.ID
+		and A.id = #{value}
+	</select>
+	
+</mapper>

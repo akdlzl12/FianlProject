@@ -1,0 +1,201 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Insert title here</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<script src="/resources/js/pos/refund.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="/resources/css/pos/common.css">
+    <link rel="stylesheet" href="/resources/css/pos/refunded.css">
+</head>
+<body>
+    <%@ include file="/WEB-INF/views/pos/common/nav.jsp" %>
+    
+    <div class="container">
+    <c:set var="nowPage" value="refundPage"/>
+	<%@ include file="/WEB-INF/views/pos/common/nav-tab.jsp" %>
+        
+        <div id="main-box">
+        	<div class="row">
+				<div id="payment-info-box" class="col-sm-7 border-box">
+					<div class="border-box outer-box">
+						<form method="post" action="refund.esc" id="search-ticket-form" class="form-horizontal">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">판매번호</label>
+								<div class="col-sm-7">
+									<input type="text" name="receiptNo" id="receipt-no-input" class="form-control" value="${info.receiptInfo.rid }"/>
+								</div>
+
+								<button type="submit" id="search-btn" class="btn btn-boots">조회</button>
+ 								<button type="button" id="reprinted-btn" class="btn btn-boots pull-right">재출력</button>
+							</div>
+						</form>
+					</div>
+					
+					<div id="discount-list-box" class="border-box">
+						<div class="col-sm-offset-1">
+							<div class="row">
+								<label class="col-sm-2">할인내역</label>
+								<div id="payment-table-box" class="col-sm-9">
+									<table class="table table-hover">
+										<thead>
+											<tr>
+												<th>할인명</th><th>수량</th><th>할인금액</th>
+											</tr>
+										</thead>
+										<tbody>
+											<c:forEach var="forDiscount" items="${info.discountList }">
+												<tr>
+													<td>${forDiscount.discount.name }</td>
+													<td>1</td>
+													<c:if test="${forDiscount.discount.discountType eq 'F' }">
+														<td><fmt:formatNumber value="-${forDiscount.discount.discountPrice }" pattern="#,###"/></td>
+													</c:if>
+													<c:if test="${forDiscount.discount.discountType eq 'S' }">
+														<td><fmt:formatNumber value="-${forDiscount.discount.customerType.price - forDiscount.discount.discountPrice }" pattern="#,###"/></td>
+													</c:if>
+													<c:if test="${forDiscount.discount.discountType eq 'P' }">
+														<td><fmt:formatNumber value="-${forDiscount.discount.customerType.price * forDiscount.discount.discountPercent / 100 }" pattern="#,###"/></td>
+													</c:if>
+												</tr>
+											</c:forEach>
+											
+											<c:forEach var="forCoupon" items="${info.couponList }">
+												<tr>
+													<td>${forCoupon.coupon.name }</td>
+													<td colspan="2">1</td>
+												</tr>
+											</c:forEach>
+											
+											<c:if test="${info.receiptInfo.miliege ne null}">
+												<tr>
+													<td>포인트 할인</td>
+													<td></td>
+													<td>-${info.receiptInfo.miliege }</td>
+												</tr>
+											</c:if>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div id="payment-type-box" class="border-box">
+						<div class="col-sm-offset-1">
+							<div class="row">
+								<label class="col-sm-2">결제수단</label>
+								<div class="col-sm-9">
+									<table id="payment-type-table" class="table table-hover">
+										<thead>
+											<tr>
+												<th>구분</th><th>결제정보</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+													<c:choose>
+														<c:when test="${info.receiptInfo.purchaseType eq 'C' }">
+															카드
+														</c:when>
+														<c:when test="${info.receiptInfo.purchaseType eq 'M' }">
+															현금
+														</c:when>
+														<c:when test="${info.receiptInfo.purchaseType eq 'O' }">
+															온라인
+														</c:when>
+													</c:choose> 
+												</td>
+												<td>${info.receiptInfo.creditNo }</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div id="purchase-info-box" class="col-sm-4 border-box pull-right">
+					<div id="purchase-movie-box" class="border-box">
+						<label>구입 내역</label>
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th></th><th>구매내용</th><th>상영관</th><th>상영시간</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<input type="checkbox" name="purchase"/>
+									</td>
+									<td>${info.movie.name }</td><td>${info.movieTime.screenMovie.screen.name }</td><td><fmt:formatDate value="${info.movieTime.startedAt }" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					
+					<div id="purchase-type-box" class="border-box">
+						<table id="purchase-type-table" class="table table-hover">
+							<thead>
+								<tr>
+									<th>분류</th><th>수량</th><th>가격</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach var="forTicket" items="${info.ticketList }">
+									<tr>
+										<td>${forTicket.customerType.type }</td>
+										<td>1</td>
+										<td><fmt:formatNumber value="${forTicket.customerType.price }" pattern="#,###"/></td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
+					
+					<div id="price-box" class="border-box">
+						<div class="row">
+							<label class="col-sm-3">총 결제 금액</label>
+ 							<div id="total-price-box" class="col-sm-8 text-right"><fmt:formatNumber value="${info.receiptInfo.price + info.receiptInfo.discountedPrice}" pattern="#,###"/></div>
+						</div>
+					</div>
+					
+					<div id="btn-box">
+						<form method="post" action="refundconfirm.esc" id="refund-form">
+							<input type="hidden" name="receiptNo" id="hidden-receipt-no" value="${info.receiptInfo.rid }"/>
+							<button type="submit" id="refund-btn" class="btn btn-boots btn-lg">환불</button>
+							<a href="home.esc" class="btn btn-boots btn-lg pull-right">취소</a>
+						</form>						
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="check-refund-modal" class="modal bs-example-modal-lg">
+    	<div class="modal-dialog modal-lg">
+    		<div class="modal-content">
+		    	<div class="modal-body">
+		    		<h3>환불을 완료합니다. 진행하시겠습니까?</h3>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<div class="pull-right">
+		    			<button id="confirm-btn" type="button" class="btn btn-boots btn-lg">확인</button>
+		    			<button type="button" class="btn btn-defalut btn-lg" data-dismiss="modal">취소</button>
+		    		</div>
+		    	</div>
+    		</div>
+    	</div>
+    </div>
+</body>
+</html>
